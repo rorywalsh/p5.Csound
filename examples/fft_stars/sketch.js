@@ -12,7 +12,7 @@ RW 2022 */
 
 async function preload() {
 
-  csound = await Csound.create();
+  csound = await Csound.create({options:['-odac', '--0dbfs=1']});
 
   await csound.evalCode(`
   giWavetable ftgen 1, 0, 4096, 10, 1, 0, 1/3, 0, 1/5, 0, 1/7 

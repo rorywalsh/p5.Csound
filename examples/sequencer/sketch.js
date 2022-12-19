@@ -11,7 +11,7 @@ let numberOfVoices = 8;
 /* p5.Csound sequencer example RW 2022 */
 
 async function preload() {
-    csound = await Csound.create({ messageLevel: "" });
+    csound = await Csound.create({options:['-odac', '--0dbfs=1']});
 
     await csound.evalCode(`
 

@@ -11,23 +11,24 @@ export const create = async (args = {}) => {
 
   let inputChannelCount = typeof args.inputChannelCount === "undefined" ? 2 : args.inputChannelCount;
   let outputChannelCount = typeof args.outputChannelCount === "undefined" ? 2 : args.outputChannelCount;
-  let zerodbfs = typeof args.zerodbfs === "undefined" ? 1 : args.zerodbfs;
-  let messageLevel = typeof args.messageLevel === "undefined" ? '-m0d' : args.messageLevel;
-  let samplingRate = typeof args.samplingRate === "undefined" ? 44100 : args.samplingRate;
+  let worker = typeof args.worker === "undefined" ? false : args.worker;
+  let spn = typeof args.spn === "undefined" ? false : args.spn;
+  let options = typeof args.options === "undefined" ? [] : args.options;  
 
   csoundObj = await Csound({
-    useWorker: false,
-    useSPN: false,
+    useWorker: worker,
+    useSPN: spn,
     outputChannelCount: outputChannelCount,
     inputChannelCount: inputChannelCount
   });
 
+  //set default 0dbfs
+  await csoundObj.setOption("--0dbfs=1");
 
-  await csoundObj.setOption("--0dbfs=" + zerodbfs);
-  await csoundObj.setOption("-odac");
-  await csoundObj.setOption(messageLevel);
-  await csoundObj.setOption("--sample-rate=" + samplingRate);
-
+  options.forEach(async function(o){
+     await csoundObj.setOption(o);
+     print(o);
+  });
 
   return csoundObj;
 };

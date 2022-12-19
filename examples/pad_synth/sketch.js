@@ -10,7 +10,7 @@ let currentIndex = 0;
 
 async function preload() {
 
-  csound = await Csound.create();
+  csound = await Csound.create({options:['-odac', '--0dbfs=1']});
 
   await csound.evalCode(`
     ;the following tables are used to allow morphing between timbres
