@@ -26,20 +26,21 @@ endin
 //create canvas
 function setup() {
   var cnv = createCanvas(800, 400);
-  cnv.parent('sketch-holder')
   var x = (windowWidth - width) / 2;
   var y = (windowHeight - height) / 2;
   cnv.position(x, y);
-  background(255, 0, 200);
+  background("#374752");
 }
 
 function draw() {
-  background("#212121");
+  background("#374752");
   fill(255);
 
   if (csound) {
-    if (balls.length == 0)
-      text("Drag with the mouse..", width / 2, height / 2);
+    if (balls.length == 0){
+      textAlign(CENTER);
+      text("Drag and release with the mouse..", width / 2, height / 2);
+    }
   }
   else {
     text("Please wait while Csound loads..", width / 2, height / 2);
