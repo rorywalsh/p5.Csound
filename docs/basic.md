@@ -6,12 +6,12 @@ The only file you need in order to use p5.Csound is p5.csound.js. This bundles t
 <body>
   <main>
   </main>
-  <script src="../../lib/p5.csound.js"></script>
+  <script src="path/to/p5.csound.js"></script>
   <script src="sketch.js"></script>
 </body>
 ```
 
-With that done, you can create an instance of Csound using the `Csound.create()` method. Note that almost all of Csound's function are marked as `async`. This mean you will need to mark some p5 functions as `async` too. For example, if we load Csound in the `p5.preload()` function, we need to mark is as `async`.
+With that done, you can create an instance of Csound using the `Csound.create()` method. Almost all of Csound's function are marked as `async`. This mean you will need to mark some p5 functions as `async` too. For example, if we load Csound in the `p5.preload()` function, we need to mark is as `async`.
 
 ```js
 async function preload() {
@@ -29,7 +29,7 @@ The `Csound.create()` returns a Csound object, and is passed an optional object 
 
 > Note that 0dbfs is set to 1 by default, but can be overrode with the `--0dbfs=N` option. 
 
-Once you have created the core `csound` object, you can compile some Csound code using the `csound.evalCode()` function. Although you can compile entire Csound files, the examples presented here all use `csound.evalCode()` to compile Csound code when it is needed. The following code will compile instrument 1. 
+Only one Csound object can be created per script. Once you have created the core `csound` object, you can compile some Csound code using the `csound.evalCode()` function. Although you can compile entire Csound files, the examples presented here all use `csound.evalCode()` to compile Csound code when it is needed. The following code will compile instrument 1. 
 
 ```js
     await csound.evalCode(`
