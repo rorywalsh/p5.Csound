@@ -13,7 +13,6 @@ async function preload() {
 
     await csound.evalCode(`
     instr 1
-        setksmps 1
         a1 inch 1
         chnset rms(a1), "rms"
     endin
@@ -43,6 +42,7 @@ function draw() {
           background("#212121");
         else
           background(detectBeat(amplitude) * 255);
+
         strokeWeight(1);
         fill(255);
 

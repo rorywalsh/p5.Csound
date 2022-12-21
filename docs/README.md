@@ -4,6 +4,10 @@ p5.Csound is a lightweight wrapper to the web assembly build of Csound. It provi
 
 Note this project would not be possible without the efforts of <font color="cornflowerblue">Steven Yi</font>, <font color="cornflowerblue">Hlöðver Sigurðsson</font> and numerous other Csound developers. More details on their work can be found on the main Csound github repository. The documentation for the WASM build of Csound can be found [here](https://github.com/csound/csound/tree/master/wasm/browser). 
 
-Note that the examples presented here assume some prior knowledge of Csound. If you have no previous experience with Csound, it might be worth taking a look at the Csound FLOSS manual, which provide interactive learning examples via the browser. The floss manual can be found [here](https://flossmanual.csound.com/).  
+Note that the examples presented here assume some prior knowledge of Csound. If you have no previous experience with Csound, it might be worth taking a look at the Csound FLOSS manual, which provide interactive learning examples via the browser. The floss manual can be found [here](https://flossmanual.csound.com/). 
+
+#### Running the examples
+
+All of the examples provided with this project will need some kind of server if you wish to run them locally. VS Code offers a very simple live server extension that is more or less fool proof. Simply install the extension, open an index.html file from any of the example folders, and select to 'run in live server'. 
 
   

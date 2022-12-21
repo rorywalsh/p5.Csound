@@ -1,5 +1,5 @@
 let csound = null;
-let isPlaying = false;
+
 
 /* This sketch will trigger a sample to play
 whenever the user clicks the sketch 
@@ -9,7 +9,7 @@ async function preload() {
 
   csound = await Csound.create({options:['-odac', '--0dbfs=1']});
 
-  await Csound.loadAsset("./pianoMood.wav", "pianoMood.wav");
+  await Csound.loadAsset("./pianoMood.wav");
 
   await csound.evalCode(`
   instr 1
@@ -32,7 +32,7 @@ function setup() {
 }
 
 function draw() {
-  background("#212121");
+  background("#374752");
   fill(255);
   textAlign(CENTER);
 
@@ -48,6 +48,5 @@ async function mousePressed() {
   Csound.startAudio();
   if (csound) {
     csound.evalCode(`schedule(1, 0, 10)`); //play sample for 10 seconds
-    isPlaying = true;
   }
 }

@@ -1,6 +1,7 @@
 ## Basic overview
 
-The only file you need in order to use p5.Csound is p5.csound.js. This bundles the p5.Csound wrapper, and the WASM build of Csound into a single JS file. If you wish to build the library yourself, see the building page. Otherwise just use the prebuilt version in the downloads page. Once you have the library, you need only include that file in your sketches index.html:
+The only file you need in order to use p5.Csound is p5.csound.js. This file bundles the p5.Csound wrapper, and the WASM build of Csound into a single JS file. If you wish to build the library yourself, see the building page. Otherwise just use the prebuilt version in the downloads page. 
+Once you have the library, you need only include that file in your sketches index.html:
 
 ```
 <body>

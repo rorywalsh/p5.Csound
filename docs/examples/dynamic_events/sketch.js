@@ -34,20 +34,19 @@ function setup() {
   var x = (windowWidth - width) / 2;
   var y = (windowHeight - height) / 2;
   cnv.position(x, y);
-  background(255, 0, 200);
+  background("#374752");
   gravity = createVector(0, 0.1);
 
 }
 
 function draw() {
-  background("#222");
+  background("#374752");
   if (csound) {
     if (balls.length == 0) {
       fill(255)
       text("Drag with the mouse..", width / 2, height / 2);
     }
     balls.forEach((ball) => {
-      let gravitationalForce = p5.Vector.mult(gravity, ball.mass);
       ball.applyForce(gravity);
       ball.update();
       ball.display();
@@ -119,7 +118,7 @@ class Ball {
         //if Csound has loaded trigger a score event
         if (csound) {
           csound.evalCode(
-            `schedule(1.${this.numBounces}, 0, ${impulseDur / this.numBounces}, ${impulse}, ${freq})`
+            `schedule(1, 0, ${impulseDur / this.numBounces}, ${impulse}, ${freq})`
           );
           this.numBounces++;
         }
