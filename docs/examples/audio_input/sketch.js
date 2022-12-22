@@ -1,15 +1,15 @@
 let csound = null;
 let balls = [];
-let beatLevelDecay = 0.05;
+let beatLevelDecay = 0.01;
 let beatLevel = 0;
-let threshold = 0.06;
+let threshold = 0.2;
 let amplitude;
 let isPlaying = false;
 
 /* RW 2022 */
 
 async function preload() {
-    csound = await Csound.create({options:['-odac', '-iadc', '--0dbfs=1']});
+    csound = await Csound.create({ options: ['-odac', '-iadc', '--0dbfs=1'] });
 
     await csound.evalCode(`
     instr 1
@@ -33,15 +33,17 @@ function setup() {
     var y = (windowHeight - height) / 2;
     cnv.position(x, y);
     background("#212121");
+
 }
 
 function draw() {
-  background("#212121");
+    background("#374752");
     if (csound && isPlaying) {
-        if(amplitude < 0.01)
-          background("#212121");
-        else
-          background(detectBeat(amplitude) * 255);
+        if (amplitude < 0.01)
+            background("#374752");
+        else {
+            detectLevel(amplitude);
+        }
 
         strokeWeight(1);
         fill(255);
@@ -64,8 +66,8 @@ function draw() {
             balls[i].display();
             balls[i].checkEdges();
             //remove balls that go off the bottom of the screen...
-            if (balls[i].position.y > height) 
-              balls.splice(i, 1);
+            if (balls[i].position.y > height)
+                balls.splice(i, 1);
         }
     } else {
         textAlign(CENTER);
@@ -74,7 +76,7 @@ function draw() {
     }
 }
 
-function detectBeat(level) {
+function detectLevel(level) {
     if (level > threshold) {
         beatLevel = 1;
         for (let i = 0; i < 10; i++) {
@@ -83,14 +85,12 @@ function detectBeat(level) {
             );
         }
     }
-    if (beatLevel > 0) beatLevel -= beatLevelDecay;
-
-    return beatLevel;
 }
 
 async function mousePressed() {
-  isPlaying = true;
-  await csound.evalCode("schedule(1, 0, 9999)");
+    Csound.startAudio()
+    isPlaying = true;
+    await csound.evalCode("schedule(1, 0, 9999)");
 }
 
 //based on Shiffman's nature of code examples

@@ -5,3 +5,47 @@ html, body {
 canvas {
   display: block;
 }
+
+/* Styles the whole slider */
+.customSliders{
+  width: 80px;
+  background-color: transparent;
+  
+  /* Removes some defaults */
+  -webkit-appearance: none;
+}
+
+
+/* These styles affect what happens when the cursor is focused on the slider (i.e. clicking it) */
+.customSliders:focus {
+  
+  /* Stops the default outline showing up */
+  outline: none;
+}
+
+/* This is the "track" that the slider sits on  */
+.customSliders::-webkit-slider-runnable-track {
+  background: #ffffff;
+  height: 3px;
+  -webkit-appearance: none;
+  
+  /* Turns the cursor into the hand pointer icon when hovering over the slider  */
+  cursor: pointer;
+  
+}
+
+/* This is the moveable bit of the slider, known as the "thumb"*/
+.customSliders::-webkit-slider-thumb {
+  width: 15px;
+  height: 15px;
+  background:#338190;
+  cursor: pointer;
+  -webkit-appearance: none;
+  
+  /* negative top padding moves it up */
+  margin-top: -6px;
+  
+  /* Border radius gives rounded corners, if they're big enough, you end up with circles */
+  border-radius: 8px;
+  
+}

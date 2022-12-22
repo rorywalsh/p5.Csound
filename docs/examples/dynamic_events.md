@@ -3,7 +3,6 @@
 
 The following sketch shows how a Csound instrument can be fed information from events within the sketch in order to provide a stronger connection between what is seen on screen, and what is heard.  
 
-
 [](/dynamic_events/index.html ':include :type=iframe width=800px height=400px frameBorder=0 scrolling="no"')
 
 Once again, the Csound instrument is loaded in the `preload()` function. It's a simple subtractive synth, that wil be fed duration, amplitude, frequency and filter cutoff values from the sketch when an event takes place. 
@@ -51,4 +50,4 @@ if (this.position.y > height - this.radius) {
     }
 ```
 
-The frequency of the sound each ball makes is determined by it mass. The small the ball, the higher in pitch it will sounds when it bounces. The duration of each note will decrease on each bounce thanks to the duration being set as `impuleDur / this.numBounces`. Finally, the `impulse` var is used to determine how much filtering takes place on each bounce. As the ball loses more and more energy, the higher end of the spectrum becomes less and less prominent. 
+The frequency of the sound each ball makes is determined by it mass. The small the ball, the higher in pitch it will sound when it bounces. The duration of each note will decrease on each bounce thanks to the duration being set as `impuleDur / this.numBounces`. Finally, the `impulse` var is used to determine how much filtering takes place on each bounce. As the ball loses more and more energy, the higher end of the spectrum becomes less and less prominent. 

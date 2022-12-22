@@ -89,7 +89,7 @@ async function setup() {
 }
 
 function draw() {
-  background("#212121");
+  background("#374752");
 
   if (csound && isPlaying) {
     tables.forEach(t => t.display(currentIndex));
@@ -144,8 +144,8 @@ class Table{
             if(activeTable === this.index){
                 this.alphaFade = 200;
             }
-            this.c.setAlpha(Math.max(10, this.alphaFade-=0.1));
-            stroke(activeTable === this.index ? color('#46B5CB') : this.c);
+            this.c.setAlpha(Math.max(10, this.alphaFade-=0.05));
+            stroke(activeTable === this.index ? color('#46B5CB') : (this.alphaFade>10 ? this.c : color(255, 40)));
             line(this.previousX, this.previousY, x, y);
             this.previousX = x;
             this.previousY = y;

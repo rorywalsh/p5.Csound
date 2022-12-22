@@ -19,7 +19,7 @@ class SequencerVoice {
       if (this.beatArray[i] == 1)
         fill(this.colour);
       else
-        fill(0);
+        fill(40);
       rect(i * 45 + this.x, this.y, 30, 30, 4);
     }
     strokeWeight(0)

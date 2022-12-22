@@ -12,22 +12,20 @@ RW 2022 */
 
 async function preload() {
 
-  csound = await Csound.create({options:['-odac', '--0dbfs=1']});
+  csound = await Csound.create({ options: ['-odac', '--0dbfs=1'] });
 
   await csound.evalCode(`
-  giWavetable ftgen 1, 0, 4096, 10, 1, 0, 1/3, 0, 1/5, 0, 1/7 
 
   instr 1
     aEnv linen rnd(0.2), p3/2, p3, p3/2
-    a1 oscili aEnv, rnd(1000), giWavetable
+    a1 oscili aEnv, rnd(1000)
     outs a1, a1
     schedule(1, rnd(3), 10)
   endin
   `);
 
-
   await csound.start();
-  
+
   audioCntx = await csound.getAudioContext();
   fft = audioCntx.createAnalyser();
   audioNode = await csound.getNode();
@@ -37,10 +35,9 @@ async function preload() {
   fft.getByteFrequencyData(freqData);
 
   for (let i = 0; i < freqData.length; i++) {
-    stars.push(new Star(random(-50, width+50), random(height), random(1, 30)));
+    stars.push(new Star(random(width), random(height), random(1, 30)));
   }
 }
-
 
 //create canvas
 function setup() {
@@ -60,9 +57,9 @@ function draw() {
     fft.getByteFrequencyData(freqData);
 
     for (let i = 0; i < freqData.length; i++) {
-      let x = map(i, 0, freqData.length, -50, width+50);
+      let x = map(i, 0, freqData.length, -50, width + 50);
       stars[i].size = map(freqData[i], 0, 255, 2, 40);
-      stars[i].display(map(freqData[i], 0, 255, 0.9, 1));
+      stars[i].display();
     }
   }
 
@@ -85,18 +82,22 @@ class Star {
     this.size = s;
     let l = random(0, 1);
     let c = color("#46B5CB");
-    this.colour = color(red(c)*l, green(c)*l, blue(c)*l);
-    // this.colour.setAlpha(random(100, 255));
+    this.colour = color(red(c) * l, green(c) * l, blue(c) * l);
   }
 
-  display(brightness) {
+  display() {
+    if (this.size < 10)
+      strokeWeight(0);
+    else
+      strokeWeight(1);
+
+    let brightness = map(this.size, 2, 40, .9, 1);
+
     if (brightness > .4)
       fill(this.colour);
     else
       fill(this.colour * brightness);
+      
     ellipse(this.x, this.y, this.size);
-
-    this.x = this.x > width+50 ? -10 : this.x+0.1;
-
   }
 }

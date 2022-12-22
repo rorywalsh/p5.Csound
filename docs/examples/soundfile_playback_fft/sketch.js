@@ -5,9 +5,7 @@ let audioNode = null;
 let fft = null;
 let colour;
 
-/* This sketch will trigger a sample to play
-whenever the user clicks the sketch 
-RW 2022 */
+/* RW 2022 */
 
 async function preload() {
 
@@ -22,14 +20,11 @@ async function preload() {
   endin
   `);
 
-
-  await csound.start();
-  
+  await csound.start();  
   audioCntx = await csound.getAudioContext();
   fft = audioCntx.createAnalyser();
   audioNode = await csound.getNode();
   audioNode.connect(fft);
-
 }
 
 
@@ -40,7 +35,7 @@ function setup() {
 }
 
 function draw() {
-  background("#212121");
+  background("#374752");
   if (!isPlaying) {
     fill(255);
     textAlign(CENTER);
@@ -51,19 +46,10 @@ function draw() {
     fft.getByteFrequencyData(freqData);
 
     noStroke();
-
-
+    fill(colour);
     for (let i = 0; i < freqData.length; i++) {
-      let x = map(i, 0, freqData.length / 2, 0, width);
+      let x = map(i, 0, freqData.length / 4, 0, width);
       let h = -height + map(freqData[i], 0, 255, height, 0);
-      colour.setAlpha(200)
-      fill(colour);
-      rect(x, height, width / freqData.length, h * .6);
-      colour.setAlpha(175)
-      fill(colour);
-      rect(x, height, width / freqData.length, h * .3);
-      colour.setAlpha(150)
-      fill(colour);
       rect(x, height, width / freqData.length, h);
     }
   }

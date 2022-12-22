@@ -5,6 +5,8 @@ let frequency = 200;
 let player;
 let interval = 500;
 let gameOver = false;
+let baseFreq = 100;
+let freqRange, micThreshold;
 
 /* RW 2022 */
 
@@ -15,16 +17,18 @@ async function preload() {
     instr 1
         a1 inch 1
         a1 tone a1, 500
-        kCps, kRms pitchamdf a1, 50, 500
+        kCps, kRms pitchamdf a1, 50, 1000
         kCps tonek kCps, 10
         kRms tonek kRms, 10
-        if kRms > 0.01 then
+        kThreshold chnget "micThreshold"
+        if kRms > kThreshold then
             chnset kCps, "freq"
         endif
     endin
     `);
 
     await csound.start();
+    await csound.setControlChannel("micThreshold", 0.2);
 
     //query the amplitude every 50ms..
     setInterval(async function () {
@@ -40,14 +44,33 @@ function setup() {
     cnv.position(x, y);
     background("#374752");
 
+    micThreshold = createSlider(0.001, 1, 0.1, 0.001);
+    micThreshold.position(x+90, y+384);
+    micThreshold.input(changeMicThreshold);
+    micThreshold.addClass("customSliders");
+
+    freqRange = createSlider(50, 500, 100, 1);
+    freqRange.position(x+278, y+384);
+    freqRange.addClass("customSliders");
+
     player = new Player();
     setInterval(function () {
-        enemies.push(new Enemy(random(width), -50, 30, 20));
+        if(isPlaying && !gameOver){
+            enemies.push(new Enemy(random(width), -50, 30, 20));
+        }
     }, interval--);
+}
+
+async function changeMicThreshold(){
+    await csound.setControlChannel("micThreshold", micThreshold.value());
 }
 
 function draw() {
     background("#374752");
+    fill(255)
+    text("Mic Threshold", 50, 390);
+    text("Base frequency", 230, 390);
+
     if (csound && isPlaying && !gameOver) {
         enemies.forEach((e) => {
             e.display();
@@ -75,20 +98,22 @@ async function mousePressed() {
     else if(gameOver){
         gameOver = false;
     }
+
+    print(mouseX, mouseY)
 }
 
 class Player {
     constructor() {
-        this.position = createVector(width / 2 - 10, height - 40);
-        this.w = 20;
-        this.h = 20;
+        this.position = createVector(width / 2 - 10, height - 60);
+        this.w = 40;
         this.colour = color("#46B5CB");
     }
 
     display() {
         fill(this.colour);
-        ellipse(this.position.x, this.position.y, this.w, this.h, 5);
-        let xPos = map(frequency, 50, 500, 0, width);
+        stroke(255);
+        ellipse(this.position.x, this.position.y, this.w);
+        let xPos = map(frequency, freqRange.value(), 300, 0, width);
         this.position.x = xPos;
     }
 }
@@ -104,6 +129,7 @@ class Enemy {
 
     display() {
         fill(this.colour);
+        stroke(0);
         rect(this.position.x, this.position.y, this.w, this.h, 5);
         this.position.y++;
     }
