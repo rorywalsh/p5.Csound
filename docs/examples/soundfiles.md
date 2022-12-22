@@ -4,6 +4,9 @@
 To work with sound files in p5.Csound we must first load them. Note you must be running a local server in order to work with sound files. The following basic sketch will play a sound file when user's click it. 
 
 [](/soundfile_playback/index.html ':include :type=iframe width=800px height=200px frameBorder=0 scrolling="no"')
+<p align="right">
+<a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/soundfile_playback/sketch.js" target="_blank">sketch.js</a>
+</p>
 
 As in each of the examples presented here, the Csound instrument is loaded in the `preload()` function. In this case it is a very simple instrument that reads a sound file from disk. Before `csound.evalCode()` is called, the sound file needs to be loaded. To do this, one can call the `Csound.loadAsset()` function.  
 
@@ -48,6 +51,9 @@ async function mousePressed() {
 The previous example worked with a sound file that was located on the server. It is also possible to dynamically load files as shown in the example below. 
 
 [](/soundfile_load/index.html ':include :type=iframe width=800px height=400px frameBorder=0 scrolling="no"')
+<p align="right">
+<a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/soundfile_load/sketch.js" target="_blank">sketch.js</a>
+</p>
 
 The p5.js function `createFileInput()` can be used to access a file from local storage. Before looking at how that is done, let's first look at the `preload()` function for the above sketch. Instead of reading the contents of the sound file from disk it will be loaded to a function table instead. This provides more control over the sound file playback, and lets us easily sync up a playback scrubber. Here is the `preload()` function.
 

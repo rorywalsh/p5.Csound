@@ -4,6 +4,9 @@
 The following sketch shows how a Csound instrument can be fed information from events within the sketch in order to provide a stronger connection between what is seen on screen, and what is heard.  
 
 [](/dynamic_events/index.html ':include :type=iframe width=800px height=400px frameBorder=0 scrolling="no"')
+<p align="right">
+<a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/dynamic_events/sketch.js" target="_blank">sketch.js</a>
+</p>
 
 Once again, the Csound instrument is loaded in the `preload()` function. It's a simple subtractive synth, that wil be fed duration, amplitude, frequency and filter cutoff values from the sketch when an event takes place. 
 

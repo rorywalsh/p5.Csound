@@ -4,7 +4,9 @@
 The following sketch shows how to access live audio input. In this case it is used to trigger an array of balls on the screen.  
 
 [](/audio_input/index.html ':include :type=iframe width=800px height=400px frameBorder=0 scrolling="no"')
-
+<p align="right">
+<a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/audio_input/sketch.js" target="_blank">sketch.js</a>
+</p>
 The `preload()` function looks like this. 
 
 ```js
@@ -97,6 +99,9 @@ function draw() {
 Csound ships with quite a few pitch detection opcodes. The following sketch uses the `pitchamdf` opcode to track the incoming pitch and uses it to control the players position on screen. Watch out for enemies! 
 
 [](/audio_input_pitch/index.html ':include :type=iframe width=800px height=400px frameBorder=0 scrolling="no"')
+<p align="right">
+<a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/audio_input_pitch/sketch.js" target="_blank">sketch.js</a>
+</p>
 
 The `preload()` function is not dissimilar to the one presented in the first sketch above.
 

@@ -4,6 +4,9 @@
 Although it is possible to use a number of spectral opcodes in Csound to perform FFT analysis, the Web Audio API provides an easy to use *AnalyserNode* that can be used to simplify the process. This will serve as a good example of how to connect Csound to other web audio nodes. The sketch below loads a sound file and display a real time spectrogram as it is playing. 
 
 [](/soundfile_playback_fft/index.html ':include :type=iframe width=800px height=200px frameBorder=0 scrolling="no"')
+<p align="right">
+<a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/soundfile_playback_fft/sketch.js" target="_blank">sketch.js</a>
+</p>
 
 The `preload()` function for this sketch uses a few new Csound functions, and looks like this:
 
@@ -53,6 +56,9 @@ Once we have the freq/amp data, it's quite trivial to draw it to the screen. Not
 Once we have access to the FFT data, we can use to it to draw anything we like. In this sketch, stars are placed around the screen. Each star has a frequency associated with it. When there is energy at a given frequency, its corresponding stars will glow brighter. 
 
 [](/fft_stars/index.html ':include :type=iframe width=800px height=400px frameBorder=0 scrolling="no"')
+<p align="right">
+<a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/fft_stars/sketch.js" target="_blank">sketch.js</a>
+</p>
 
 The `preload()` function for this sketch is similar to the previous one, but after starting Csound we create our `freqData` array straight away. We then use its size to create the our constellation of stars.    
 

@@ -4,6 +4,9 @@
 The following sketch shows how a Csound instrument can be triggered from on screen events. In this case, collisions with the outer bounds of the sketch. 
 
 [](/simple_triggers/index.html ':include :type=iframe width=800px height=400px frameBorder=0 scrolling="no"')
+<p align="right">
+<a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/simple_triggers/sketch.js" target="_blank">sketch.js</a>
+</p>
 
 The Csound instrument is loaded in the `preload()` function. It could be also loaded within the `setup()` function, but it seems cleaner to use `preload()` which gets called before `setup()` 
 

@@ -3,6 +3,9 @@
 The following sketch shows a simple grid based sequencer. The sketch illustrates how to achieve good timing with musical events by using Csound as the main clock. If you try to use JS timer to sequencer music you will inevitably run into issues with timing drift. Therefore it's always best to use Csound as your main clock. 
 
 [](/sequencer/index.html ':include :type=iframe width=800px height=450px frameBorder=0 scrolling="no"')
+<p align="right">
+<a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/sequencer/sketch.js" target="_blank">sketch.js</a>
+</p>
 
 This `preload()` function for this sketch looks like this:
 

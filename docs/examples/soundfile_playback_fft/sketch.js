@@ -11,11 +11,11 @@ async function preload() {
 
   csound = await Csound.create({options:['-odac', '--0dbfs=1']});
 
-  await Csound.loadAsset("./pianoMood.wav", "pianoMood.wav");
+  await Csound.loadAsset("./29704__herbertboland__pianomood5.wav");
 
   await csound.evalCode(`
   instr 1
-    a1, a2 diskin2 "pianoMood.wav", 1, 0, 1
+    a1, a2 diskin2 "29704__herbertboland__pianomood5.wav", 1, 0, 1
     outs a1, a2
   endin
   `);
