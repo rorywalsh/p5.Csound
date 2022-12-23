@@ -1,11 +1,17 @@
 let csound = null;
 var audioSample = new Array(1000);
 let amplitude;
+let audioOn, audioOff, audioState=true;
+let audioImagePos;
 let isPlaying = false;
 
 /* RW 2022 */
 
 async function preload() {
+
+    audioOn = loadImage("../audio_on.png");
+    audioOff = loadImage("../audio_off.png");
+
     csound = await Csound.create({ options: ['-odac', '-iadc', '--0dbfs=1'] });
 
     await csound.evalCode(`
@@ -22,16 +28,17 @@ async function preload() {
     setInterval(async function () {
         amplitude = await csound.getControlChannel("amp");
     }, 10);
+
 }
 
 //create canvas
 function setup() {
-    var cnv = createCanvas(800, 400);
+    var cnv = createCanvas(800, 200);
     var x = (windowWidth - width) / 2;
     var y = (windowHeight - height) / 2;
     cnv.position(x, y);
     background("#212121");
-
+    audioImagePos = {x:width-50, y:height-50, w:32, h:32};
 }
 
 function draw() {
@@ -60,10 +67,28 @@ function draw() {
         fill(255);
         text("Press the screen to start", width / 2, height / 2);
     }
+
+    image(audioState ? audioOn : audioOff, audioImagePos.x, audioImagePos.y, audioImagePos.w, audioImagePos.h);
 }
 
 async function mousePressed() {
     Csound.startAudio()
+
+    if (!isPlaying)
+        await csound.evalCode("schedule(1, 0, 9999)");
+
     isPlaying = true;
-    await csound.evalCode("schedule(1, 0, 9999)");
+
+    if (mouseX > audioImagePos.x && mouseY > audioImagePos.y &&
+        mouseX < audioImagePos.x + audioImagePos.w && mouseY < audioImagePos.y + audioImagePos.h) {
+        if (audioState) {
+            await csound.pause();
+            audioState = false;
+        }
+        else {
+            await csound.resume();
+            print("resuming");
+            audioState = true;
+        }
+    }
 }

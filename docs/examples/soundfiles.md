@@ -15,11 +15,11 @@ async function preload() {
 
   csound = await Csound.create({options:['-odac', '--0dbfs=1']});
 
-  await Csound.loadAsset("./pianoMood.wav");
+  await Csound.loadAsset("./29704__herbertboland__pianomood5.wav", "piano.wav");
 
   await csound.evalCode(`
   instr 1
-    a1, a2 diskin2 "pianoMood.wav", 1, 0, 1
+    a1, a2 diskin2 "piano.wav", 1, 0, 1
     outs a1, a2
   endin
   `);
@@ -33,7 +33,7 @@ The `Csound.loadAsset()` has the following function prototype:
 ```js
 Csound.loadAsset(fileURL, fileName = "")
 ```
-The first parameter is a string with the full path to the file you wish to load. This file usually resides somewhere on the server. The second parameter is the name the file will be referred to after it has been loaded. In most cases it makes no sense to use a different filename to the original file, however, in some online IDEs it is required. The p5js editor is one such environment where the loaded file cannot have the same name as the original. It seems to have something to do with how certain online environments handle loading of assets.
+The first parameter is a string with the full path to the file you wish to load. This file usually resides somewhere on the server. The second parameter is the name the file will be referred to after it has been loaded. In most cases you can jusy pass a single file name, however, in some online IDEs, you must use a unique name for the file that will be passed to Csound. The p5js editor is one such environment where the loaded file cannot have the same name as the original. It seems to have something to do with how certain online environments handle loading of assets. In this case using  shorter names makes life a little simpler. 
 
 Triggering playback of the instrument is trivial, we simply start instrument 1 to play. Because of the parameters we passed to the `diskin2` opcode, it will play on loop for as long as the instrument is running. 
 

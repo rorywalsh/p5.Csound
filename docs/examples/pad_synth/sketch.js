@@ -3,12 +3,17 @@ let isPlaying = false;
 let numTables = 100;
 let tables = [];
 let currentIndex = 0;
+let audioOn, audioOff, audioState=true;
+let audioImagePos;
 
 
 /* p5.Csound pad and waterfall type display. RW 2022 */
 
 
 async function preload() {
+
+  audioOn = loadImage("../audio_on.png");
+  audioOff = loadImage("../audio_off.png");
 
   csound = await Csound.create({options:['-odac', '--0dbfs=1']});
 
@@ -78,6 +83,7 @@ async function preload() {
     setInterval(async function(){
         currentIndex = Math.floor(map(await csound.getControlChannel("currentIndex"), 0, 3, 0, numTables-1)); 
     }, 50);
+
 }
 
 //create canvas
@@ -86,6 +92,7 @@ async function setup() {
   var x = (windowWidth - width) / 2;
   var y = (windowHeight - height) / 2;
   cnv.position(x, y);
+  audioImagePos = {x:width-50, y:height-50, w:32, h:32};
 }
 
 function draw() {
@@ -99,7 +106,7 @@ function draw() {
     fill(255)
     text("Press the screen to start", width / 2, height / 2);
   }
-
+  image(audioState ? audioOn : audioOff, audioImagePos.x, audioImagePos.y, audioImagePos.w, audioImagePos.h);
 }
 
 //first time a user presses the screen we copy the contents of the 100
@@ -114,6 +121,19 @@ async function mousePressed() {
     await csound.evalCode("schedule(1, 0, 3, 1)");
     isPlaying = true;
   }
+
+  if (mouseX > audioImagePos.x && mouseY > audioImagePos.y &&
+    mouseX < audioImagePos.x + audioImagePos.w && mouseY < audioImagePos.y + audioImagePos.h) {
+    if (audioState) {
+        await csound.pause();
+        audioState = false;
+    }
+    else {
+        await csound.resume();
+        print("resuming");
+        audioState = true;
+    }
+}
 }
 
 //Table class that draws a wave shape based on the data passed to it

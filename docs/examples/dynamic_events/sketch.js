@@ -2,6 +2,8 @@ let impulseDur = 2;
 let balls = [];
 let gravity;
 let csound = null;
+let audioOn, audioOff, audioState=true;
+let audioImagePos;
 let dragCount = 0;
 
 
@@ -11,6 +13,9 @@ frequency are unique to each ball, and each bounce
 RW 2022 */
 
 async function preload() {
+
+  audioOn = loadImage("../audio_on.png");
+  audioOff = loadImage("../audio_off.png");
 
   csound = await Csound.create({options:['-odac', '--0dbfs=1']});
   await csound.evalCode(`
@@ -26,6 +31,7 @@ async function preload() {
   `);
 
   await csound.start();
+
 }
 
 //create canvas
@@ -36,11 +42,12 @@ function setup() {
   cnv.position(x, y);
   background("#374752");
   gravity = createVector(0, 0.1);
-
+  audioImagePos = {x:width-50, y:height-50, w:32, h:32};
 }
 
 function draw() {
   background("#374752");
+  textAlign(CENTER)
   if (csound) {
     if (balls.length == 0) {
       fill(255)
@@ -56,10 +63,24 @@ function draw() {
   else {
     text("Please wait while Csound loads..", width / 2, height / 2);
   }
+
+  image(audioState ? audioOn : audioOff, audioImagePos.x, audioImagePos.y, audioImagePos.w, audioImagePos.h);
 }
 
 async function mousePressed(){
   Csound.startAudio();
+  if (mouseX > audioImagePos.x && mouseY > audioImagePos.y &&
+    mouseX < audioImagePos.x + audioImagePos.w && mouseY < audioImagePos.y + audioImagePos.h) {
+    if (audioState) {
+        await csound.pause();
+        audioState = false;
+    }
+    else {
+        await csound.resume();
+        print("resuming");
+        audioState = true;
+    }
+}
 }
 
 function mouseDragged() {

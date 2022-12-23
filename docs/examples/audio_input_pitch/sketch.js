@@ -7,10 +7,16 @@ let interval = 500;
 let gameOver = false;
 let baseFreq = 100;
 let freqRange, micThreshold;
+let audioOn, audioOff, audioState = true;
+let audioImagePos;
 
 /* RW 2022 */
 
 async function preload() {
+
+    audioOn = loadImage("../audio_on.png");
+    audioOff = loadImage("../audio_off.png");
+
     csound = await Csound.create({ options: ["-odac", "-iadc", "--0dbfs=1"] });
 
     await csound.evalCode(`
@@ -34,6 +40,7 @@ async function preload() {
     setInterval(async function () {
         frequency = await csound.getControlChannel("freq");
     }, 50);
+
 }
 
 //create canvas
@@ -45,23 +52,25 @@ function setup() {
     background("#374752");
 
     micThreshold = createSlider(0.001, 1, 0.1, 0.001);
-    micThreshold.position(x+90, y+384);
+    micThreshold.position(x + 90, y + 384);
     micThreshold.input(changeMicThreshold);
     micThreshold.addClass("customSliders");
 
     freqRange = createSlider(50, 500, 100, 1);
-    freqRange.position(x+278, y+384);
+    freqRange.position(x + 278, y + 384);
     freqRange.addClass("customSliders");
 
     player = new Player();
     setInterval(function () {
-        if(isPlaying && !gameOver){
+        if (isPlaying && !gameOver) {
             enemies.push(new Enemy(random(width), -50, 30, 20));
         }
     }, interval--);
+
+    audioImagePos = {x:width-50, y:height-50, w:32, h:32};
 }
 
-async function changeMicThreshold(){
+async function changeMicThreshold() {
     await csound.setControlChannel("micThreshold", micThreshold.value());
 }
 
@@ -75,10 +84,10 @@ function draw() {
         enemies.forEach((e) => {
             e.display();
             let distance = e.position.dist(player.position);
-            if (distance < 30){
+            if (distance < 30) {
                 gameOver = true;
                 enemies = [];
-            } 
+            }
             if (e.position.y > height) enemies.splice(1, enemies.indexOf(e));
         });
 
@@ -88,18 +97,32 @@ function draw() {
         fill(255);
         text("Game Over. Press the screen to start", width / 2, height / 2);
     }
+
+    image(audioState ? audioOn : audioOff, audioImagePos.x, audioImagePos.y, audioImagePos.w, audioImagePos.h);
 }
+
 
 async function mousePressed() {
     if (!isPlaying) {
         isPlaying = true;
         await csound.evalCode("schedule(1, 0, 9999)");
     }
-    else if(gameOver){
+    else if (gameOver) {
         gameOver = false;
     }
 
-    print(mouseX, mouseY)
+    if (mouseX > audioImagePos.x && mouseY > audioImagePos.y &&
+        mouseX < audioImagePos.x + audioImagePos.w && mouseY < audioImagePos.y + audioImagePos.h) {
+        if (audioState) {
+            await csound.pause();
+            audioState = false;
+        }
+        else {
+            await csound.resume();
+            print("resuming");
+            audioState = true;
+        }
+    }
 }
 
 class Player {

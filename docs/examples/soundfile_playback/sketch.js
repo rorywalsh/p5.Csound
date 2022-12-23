@@ -1,5 +1,7 @@
 let csound = null;
-
+let audioOn, audioOff, audioState = true;
+let audioImagePos;
+let isPlaying = false;
 
 /* This sketch will trigger a sample to play
 whenever the user clicks the sketch 
@@ -7,28 +9,33 @@ RW 2022 */
 
 async function preload() {
 
-  csound = await Csound.create({options:['-odac', '--0dbfs=1']});
+  audioOn = loadImage("../audio_on.png");
+  audioOff = loadImage("../audio_off.png");
 
-  await Csound.loadAsset("./29704__herbertboland__pianomood5.wav");
+  csound = await Csound.create({ worker: true, options: ['-odac', '--0dbfs=1'] });
+  print(csound);
+
+  await Csound.loadAsset("./29704__herbertboland__pianomood5.wav", "piano.wav");
 
   await csound.evalCode(`
   instr 1
-    a1, a2 diskin2 "29704__herbertboland__pianomood5.wav", 1, 0, 1
+    a1, a2 diskin2 "piano.wav", 1, 0, 1
     outs a1, a2
   endin
   `);
 
-  await csound.start();
 
+  await csound.start();
 }
 
 
 //create canvas
 function setup() {
-  var cnv = createCanvas(800, 400);
+  var cnv = createCanvas(800, 200);
   var x = (windowWidth - width) / 2;
   var y = (windowHeight - height) / 2;
   cnv.position(x, y);
+  audioImagePos = { x: width - 50, y: height - 50, w: 32, h: 32 };
 }
 
 function draw() {
@@ -42,11 +49,28 @@ function draw() {
   else {
     text("Please wait while Csound loads..", width / 2, height / 2);
   }
+
+  image(audioState ? audioOn : audioOff, audioImagePos.x, audioImagePos.y, audioImagePos.w, audioImagePos.h);
 }
 
-async function mousePressed() {  
-  Csound.startAudio();
-  if (csound) {
-    csound.evalCode(`schedule(1, 0, 10)`); //play sample for 10 seconds
+async function mousePressed() {
+  if (mouseX > audioImagePos.x && mouseY > audioImagePos.y &&
+    mouseX < audioImagePos.x + audioImagePos.w && mouseY < audioImagePos.y + audioImagePos.h) {
+    if (audioState) {
+      await csound.pause();
+      audioState = false;
+    }
+    else {
+      await csound.resume();
+      print("resuming");
+      audioState = true;
+    }
   }
+  else {
+    print("stating")
+      Csound.startAudio();
+      if (csound) {
+        await csound.evalCode(`schedule(1, 0, 10)`); //play sample for 10 seconds
+      }
+    }
 }

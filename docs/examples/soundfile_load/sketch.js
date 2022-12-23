@@ -7,12 +7,18 @@ let previousX = 0;
 let playButton;
 let loadButton;
 let windowSize = 1;
+let audioOn, audioOff, audioState=true;
+let audioImagePos;
 
 /* This sketch will trigger a sample to play
 whenever the user clicks the sketch 
 RW 2022 */
 
 async function preload() {
+
+    audioOn = loadImage("../audio_on.png");
+    audioOff = loadImage("../audio_off.png");
+
     csound = await Csound.create({ options: ["-odac", "--0dbfs=1"] });
 
     await csound.evalCode(`
@@ -48,6 +54,7 @@ async function preload() {
     setInterval(async function () {
         currentSample = await csound.getControlChannel("sampleIndex");
     }, 10);
+
 }
 
 //create canvas
@@ -73,6 +80,8 @@ function setup() {
     playButton.position(x + 160, y + 360);
     playButton.size(140, 30);
     playButton.mousePressed(startStopPlayback);
+
+    audioImagePos = {x:width-50, y:height-50, w:32, h:32};
 }
 
 function draw() {
@@ -102,6 +111,8 @@ function draw() {
       textAlign(CENTER);
       text("Wave files only..", width/2, height/2)
     }
+
+    image(audioState ? audioOn : audioOff, audioImagePos.x, audioImagePos.y, audioImagePos.w, audioImagePos.h);
 }
 
 async function mousePressed() {
@@ -112,6 +123,19 @@ async function mousePressed() {
       await csound.setControlChannel("newIndex", sampleNum);
       await csound.setControlChannel("newIndexUpdate", random(100));
   }
+
+  if (mouseX > audioImagePos.x && mouseY > audioImagePos.y &&
+    mouseX < audioImagePos.x + audioImagePos.w && mouseY < audioImagePos.y + audioImagePos.h) {
+    if (audioState) {
+        await csound.pause();
+        audioState = false;
+    }
+    else {
+        await csound.resume();
+        print("resuming");
+        audioState = true;
+    }
+}
 }
 
 async function startStopPlayback() {

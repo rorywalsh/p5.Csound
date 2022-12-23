@@ -7,10 +7,16 @@ let csound = null;
 let pos = 0;
 let numberOfVoices = 8;
 let currentPos = 0;
+let audioOn, audioOff, audioState=true;
+let audioImagePos;
 
 /* p5.Csound sequencer example RW 2022 */
 
 async function preload() {
+
+    audioOn = loadImage("../audio_on.png");
+    audioOff = loadImage("../audio_off.png");
+
     csound = await Csound.create({ options: ['-odac', '--0dbfs=1'] });
 
     await csound.evalCode(`
@@ -89,6 +95,7 @@ async function preload() {
     setInterval(async function () {
         currentPos = await csound.getControlChannel("index");
     }, 10);
+
 }
 
 function setup() {
@@ -134,6 +141,8 @@ function setup() {
 
     for (let i = 0; i < numberOfVoices; i++)
         voices.push(new SequencerVoice(i, 55, 5 + i * 45, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
+
+    audioImagePos = {x:width-50, y:height-50, w:32, h:32};
 }
 
 function updateCsoundTables() {
@@ -156,12 +165,27 @@ async function draw() {
         fill("#46B5CB77");
         rect(currentPos * 45 + 50, 3, 40, 350, 5);
     }
+
+    image(audioState ? audioOn : audioOff, audioImagePos.x, audioImagePos.y, audioImagePos.w, audioImagePos.h);
 }
 
-function mousePressed() {
+async function mousePressed() {
     Csound.startAudio();
     voices.forEach((v) => v.hitTest(mouseX, mouseY));
     updateCsoundTables();
+
+    if (mouseX > audioImagePos.x && mouseY > audioImagePos.y &&
+        mouseX < audioImagePos.x + audioImagePos.w && mouseY < audioImagePos.y + audioImagePos.h) {
+        if (audioState) {
+            await csound.pause();
+            audioState = false;
+        }
+        else {
+            await csound.resume();
+            print("resuming");
+            audioState = true;
+        }
+    }
 }
 
 async function startStopPlayback() {

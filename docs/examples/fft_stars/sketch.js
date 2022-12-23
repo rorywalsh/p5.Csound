@@ -5,12 +5,17 @@ let audioNode = null;
 let spectrum = null;
 let fft = null;
 let stars = [];
+let audioOn, audioOff, audioState=true;
+let audioImagePos;
 
 /* This sketch will trigger a sample to play
 whenever the user clicks the sketch 
 RW 2022 */
 
 async function preload() {
+
+  audioOn = loadImage("../audio_on.png");
+  audioOff = loadImage("../audio_off.png");
 
   csound = await Csound.create({ options: ['-odac', '--0dbfs=1'] });
 
@@ -44,6 +49,7 @@ function setup() {
   var x = (windowWidth - width) / 2;
   var y = (windowHeight - height) / 2;
   cnv.position(x, y);
+  audioImagePos = {x:width-50, y:height-50, w:32, h:32};
 }
 
 function draw() {
@@ -61,16 +67,29 @@ function draw() {
       stars[i].display();
     }
   }
-
+  image(audioState ? audioOn : audioOff, audioImagePos.x, audioImagePos.y, audioImagePos.w, audioImagePos.h);
 }
 
 
-function mousePressed() {
+async function mousePressed() {
   Csound.startAudio();
   if (csound) {
     csound.evalCode(`schedule(1, 0, 10)`);
     isPlaying = true;
   }
+
+  if (mouseX > audioImagePos.x && mouseY > audioImagePos.y &&
+    mouseX < audioImagePos.x + audioImagePos.w && mouseY < audioImagePos.y + audioImagePos.h) {
+    if (audioState) {
+        await csound.pause();
+        audioState = false;
+    }
+    else {
+        await csound.resume();
+        print("resuming");
+        audioState = true;
+    }
+}
 }
 
 class Star {

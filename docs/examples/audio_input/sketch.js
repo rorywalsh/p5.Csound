@@ -5,10 +5,16 @@ let beatLevel = 0;
 let threshold = 0.2;
 let amplitude;
 let isPlaying = false;
+let audioOn, audioOff, audioState = true;
+let audioImagePos;
 
 /* RW 2022 */
 
 async function preload() {
+    
+    audioOn = loadImage("../audio_on.png");
+    audioOff = loadImage("../audio_off.png");
+
     csound = await Csound.create({ options: ['-odac', '-iadc', '--0dbfs=1'] });
 
     await csound.evalCode(`
@@ -33,7 +39,7 @@ function setup() {
     var y = (windowHeight - height) / 2;
     cnv.position(x, y);
     background("#212121");
-
+    audioImagePos = {x:width-50, y:height-50, w:32, h:32};
 }
 
 function draw() {
@@ -74,6 +80,8 @@ function draw() {
         fill(255);
         text("Press the screen to start", width / 2, height / 2);
     }
+
+    image(audioState ? audioOn : audioOff, audioImagePos.x, audioImagePos.y, audioImagePos.w, audioImagePos.h);
 }
 
 function detectLevel(level) {
@@ -89,8 +97,24 @@ function detectLevel(level) {
 
 async function mousePressed() {
     Csound.startAudio()
+
+    if (!isPlaying)
+        await csound.evalCode("schedule(1, 0, 9999)");
+
     isPlaying = true;
-    await csound.evalCode("schedule(1, 0, 9999)");
+
+    if (mouseX > audioImagePos.x && mouseY > audioImagePos.y &&
+        mouseX < audioImagePos.x + audioImagePos.w && mouseY < audioImagePos.y + audioImagePos.h) {
+        if (audioState) {
+            await csound.pause();
+            audioState = false;
+        }
+        else {
+            await csound.resume();
+            print("resuming");
+            audioState = true;
+        }
+    }
 }
 
 //based on Shiffman's nature of code examples
