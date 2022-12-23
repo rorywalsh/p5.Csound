@@ -23,25 +23,25 @@ async function preload() {
 
     await csound.evalCode(`
 
-  giSoundfile ftgen 1, 0, 2, 2, 0
+  giSoundfile = ftgen(1, 0, 2, 2, 0)
   
   instr 1
-    prints "Sample playback started"
-    iLen ftlen giSoundfile
+    prints("Sample playback started")
+    iLen = ftlen(giSoundfile)
     kIndex init 0
     setksmps 1
     
-    aTab tab a(kIndex), giSoundfile
-    outs aTab, aTab
-    kIndex = kIndex<(iLen-1) ? kIndex+1 : 0    
-    chnset kIndex, "sampleIndex"
+    aTab = table:a(a(kIndex), giSoundfile)
+    outall(aTab)
+    kIndex = kIndex%(iLen-1) + 1    
+    chnset(kIndex, "sampleIndex")
 
-    kIncomingIndexUpdate chnget "newIndexUpdate"
+    kIncomingIndexUpdate = chnget:k("newIndexUpdate")
     if changed(kIncomingIndexUpdate) == 1 then
-      kIndex chnget "newIndex"
+      kIndex = chnget("newIndex")
     endif
 
-    kStop chnget "stop"
+    kStop = chnget:k("stop")
     if kStop == 1 then
       turnoff
     endif 

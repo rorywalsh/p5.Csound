@@ -19,8 +19,8 @@ async function preload() {
 
     await csound.evalCode(`
     instr 1
-        a1 inch 1
-        chnset rms(a1), "rms"
+        aIn = inch(1)
+        chnset(rms(aIn), "rms")
     endin
     `);
 

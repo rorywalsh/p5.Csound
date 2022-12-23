@@ -21,14 +21,14 @@ async function preload() {
 
     await csound.evalCode(`
     instr 1
-        a1 inch 1
-        a1 tone a1, 500
-        kCps, kRms pitchamdf a1, 50, 1000
-        kCps tonek kCps, 10
-        kRms tonek kRms, 10
-        kThreshold chnget "micThreshold"
+        aIn = inch(1)
+        aIn = tone(aIn, 500)
+        kCps, kRms pitchamdf aIn, 50, 1000
+        kCps = tonek(kCps, 10)
+        kRms = tonek(kRms, 10)
+        kThreshold = chnget:k("micThreshold")
         if kRms > kThreshold then
-            chnset kCps, "freq"
+            chnset(kCps, "freq")
         endif
     endin
     `);
