@@ -4,7 +4,7 @@ The following sketch contains a generative pad synth that morphs between 4 diffe
 
 [](/pad_synth/index.html ':include :type=iframe width=800px height=400px frameBorder=0 scrolling="no"')
 <p align="right">
-<a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/pad_synth/sketch.js" target="_blank">sketch.js</a>
+<a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/pad_synth/sketch.js" target="_blank">Link to sketch</a>    <button class="button" onclick="reloadPage()">Reload</button>
 </p>
 
 The preload function features the usual code to start Csound, but the Csound instrument in this instance is a little more involved than in earlier sketches. It can roughly be divided into two sections. One is concerned with preparing data for the sketch to display, the other concerns the sounds the synth produces.

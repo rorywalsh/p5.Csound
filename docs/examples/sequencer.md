@@ -4,7 +4,7 @@ The following sketch shows a simple grid based sequencer. The sketch illustrates
 
 [](/sequencer/index.html ':include :type=iframe width=800px height=450px frameBorder=0 scrolling="no"')
 <p align="right">
-<a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/sequencer/sketch.js" target="_blank">sketch.js</a>
+<a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/sequencer/sketch.js" target="_blank">Link to sketch</a>    <button class="button" onclick="reloadPage()">Reload</button>
 </p>
 
 This `preload()` function for this sketch looks like this:

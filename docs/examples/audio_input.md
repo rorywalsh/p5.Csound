@@ -5,7 +5,7 @@ The following sketch shows how to access live audio input. In this case it is us
 
 [](/audio_input/index.html ':include :type=iframe width=800px height=400px frameBorder=0 scrolling="no"')
 <p align="right">
-<a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/audio_input/sketch.js" target="_blank">sketch.js</a>
+<a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/audio_input/sketch.js" target="_blank">Link to sketch</a>    <button class="button" onclick="reloadPage()">Reload</button>
 </p>
 The `preload()` function looks like this. 
 
@@ -56,6 +56,9 @@ As long as the input level is greater than the threshold (0.06), it will push so
 The following sketch will display a scrolling waveform in the style of most audio editors. 
 
 [](/audio_input_scrolling/index.html ':include :type=iframe width=800px height=200px frameBorder=0 scrolling="no"')
+<p align="right">
+<a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/audio_input_scrolling/sketch.js" target="_blank">Link to sketch</a>    <button class="button" onclick="reloadPage()">Reload</button>
+</p>
 
 The `preload()` function for this sketch si almost identical to the one above, only the Csound instrument sends the direct amplitude rather than an RMS amplitude. It also runs with a ksmps size of 1 so we can access those samples directly.
 
@@ -100,7 +103,7 @@ Csound ships with quite a few pitch detection opcodes. The following sketch uses
 
 [](/audio_input_pitch/index.html ':include :type=iframe width=800px height=400px frameBorder=0 scrolling="no"')
 <p align="right">
-<a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/audio_input_pitch/sketch.js" target="_blank">sketch.js</a>
+<a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/audio_input_pitch/sketch.js"  target="_blank">Link to sketch</a>    <button class="button" onclick="reloadPage()">Reload</button>
 </p>
 
 The `preload()` function is not dissimilar to the one presented in the first sketch above.

@@ -5,8 +5,9 @@ Although it is possible to use a number of spectral opcodes in Csound to perform
 
 [](/soundfile_playback_fft/index.html ':include :type=iframe width=800px height=200px frameBorder=0 scrolling="no"')
 <p align="right">
-<a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/soundfile_playback_fft/sketch.js" target="_blank">sketch.js</a>
+<a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/soundfile_playback_fft/sketch.js" target="_blank">Link to sketch</a>    <button class="button" onclick="reloadPage()">Reload</button>
 </p>
+
 
 The `preload()` function for this sketch uses a few new Csound functions, and looks like this:
 
@@ -57,7 +58,7 @@ Once we have access to the FFT data, we can use to it to draw anything we like. 
 
 [](/fft_stars/index.html ':include :type=iframe width=800px height=400px frameBorder=0 scrolling="no"')
 <p align="right">
-<a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/fft_stars/sketch.js" target="_blank">sketch.js</a>
+<a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/fft_stars/sketch.js" target="_blank">Link to sketch</a>    <button class="button" onclick="reloadPage()">Reload</button>
 </p>
 
 The `preload()` function for this sketch is similar to the previous one, but after starting Csound we create our `freqData` array straight away. We then use its size to create the our constellation of stars.    
