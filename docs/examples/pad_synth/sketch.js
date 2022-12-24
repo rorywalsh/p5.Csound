@@ -83,7 +83,6 @@ async function preload() {
     setInterval(async () =>{
         currentIndex = Math.floor(map(await csound.getControlChannel("currentIndex"), 0, 3, 0, numTables-1)); 
     }, 50);
-
 }
 
 //create canvas
