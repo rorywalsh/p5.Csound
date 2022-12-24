@@ -80,7 +80,7 @@ async function preload() {
 
     //set to run 20 times a second. a JS timer is fine here because it's
     //only for display purposes 
-    setInterval(async function(){
+    setInterval(async () =>{
         currentIndex = Math.floor(map(await csound.getControlChannel("currentIndex"), 0, 3, 0, numTables-1)); 
     }, 50);
 
@@ -89,8 +89,8 @@ async function preload() {
 //create canvas
 async function setup() {
   var cnv = createCanvas(800, 400);
-  var x = (windowWidth - width) / 2;
-  var y = (windowHeight - height) / 2;
+  const x = (windowWidth - width) / 2;
+  const y = (windowHeight - height) / 2;
   cnv.position(x, y);
   audioImagePos = {x:width-50, y:height-50, w:32, h:32};
 }

@@ -5,6 +5,8 @@ The following sketch shows how to access live audio input. In this case it is us
 
 [](/audio_input/index.html ':include :type=iframe width=800px height=400px frameBorder=0 scrolling="no"')
 <p align="right">
+<button onclick="myFunction()">Click me</button>
+
 <a href="https://github.com/rorywalsh/p5.Csound/blob/master/docs/examples/audio_input/sketch.js" target="_blank">sketch.js</a>
 </p>
 The `preload()` function looks like this. 

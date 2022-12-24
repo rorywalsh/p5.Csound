@@ -37,8 +37,8 @@ async function preload() {
 //create canvas
 function setup() {
   var cnv = createCanvas(800, 400);
-  var x = (windowWidth - width) / 2;
-  var y = (windowHeight - height) / 2;
+  const x = (windowWidth - width) / 2;
+  const y = (windowHeight - height) / 2;
   cnv.position(x, y);
   background("#374752");
   gravity = createVector(0, 0.1);
@@ -133,8 +133,8 @@ class Ball {
       //account for loss of speed on impact collisions..
       this.velocity.y *= 1 - this.mass / 20;
       if (this.numBounces < 20) {
-        let impulse = map(this.velocity.y, -5, 0, .5, 0);
-        let freq = (10 / this.mass) * 400;
+        const impulse = map(this.velocity.y, -5, 0, .5, 0);
+        const freq = (10 / this.mass) * 400;
 
         //if Csound has loaded trigger a score event
         if (csound) {

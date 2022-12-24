@@ -100,8 +100,8 @@ async function preload() {
 
 function setup() {
     var cnv = createCanvas(800, 450);
-    var x = (windowWidth - width) / 2;
-    var y = (windowHeight - height) / 2;
+    const x = (windowWidth - width) / 2;
+    const y = (windowHeight - height) / 2;
     cnv.position(x, y);
 
     bpmSlider = createSlider(20, 600, 240, 1);
@@ -213,12 +213,12 @@ async function changeReverb() {
 }
 
 function generatePattern() {
-    for (let i = 0; i < numberOfVoices; i++) {
+    for (const v in voices) {
         let phrase = [];
         for (let x = 0; x < numBeats; x++) {
             phrase[x] = random(1) > randomWeightSlider.value() ? 0 : 1;
         }
-        voices[i].beatArray = phrase;
+        v.beatArray = phrase;
     }
     updateCsoundTables();
 }

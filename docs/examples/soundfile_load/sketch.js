@@ -51,7 +51,7 @@ async function preload() {
 
     await csound.start();
 
-    setInterval(async function () {
+    setInterval(async () => {
         currentSample = await csound.getControlChannel("sampleIndex");
     }, 10);
 
@@ -60,8 +60,8 @@ async function preload() {
 //create canvas
 function setup() {
     var cnv = createCanvas(800, 400);
-    var x = (windowWidth - width) / 2;
-    var y = (windowHeight - height) / 2;
+    const x = (windowWidth - width) / 2;
+    const y = (windowHeight - height) / 2;
     cnv.position(x, y);
 
     background("#374752");
@@ -118,7 +118,7 @@ function draw() {
 async function mousePressed() {
   //exclude mouse clicks on buttons..
   if (mouseY < 360 && mouseX > 0 && mouseX < width) {
-      let sampleNum = map(mouseX, 0, width, 0, sampleData.length - 1);
+      const sampleNum = map(mouseX, 0, width, 0, sampleData.length - 1);
       //hack to ensure a channel changed message is always sent
       await csound.setControlChannel("newIndex", sampleNum);
       await csound.setControlChannel("newIndexUpdate", random(100));
@@ -155,8 +155,8 @@ async function startStopPlayback() {
 
 async function loadSoundfile(obj) {
     if (obj.type === "audio" && obj.subtype == "wav") {
-        let ctx = await csound.getAudioContext();
-        let c = await ctx.decodeAudioData(await obj.file.arrayBuffer());
+        const ctx = await csound.getAudioContext();
+        const c = await ctx.decodeAudioData(await obj.file.arrayBuffer());
         sampleData = await c.getChannelData(0);
         windowSize = Math.floor(sampleData.length/44100)*20;
 

@@ -36,8 +36,8 @@ async function preload() {
     await csound.start();
     await csound.setControlChannel("micThreshold", 0.2);
 
-    //query the amplitude every 50ms..
-    setInterval(async function () {
+
+    setInterval(async () => {
         frequency = await csound.getControlChannel("freq");
     }, 50);
 
@@ -46,8 +46,8 @@ async function preload() {
 //create canvas
 function setup() {
     var cnv = createCanvas(800, 400);
-    var x = (windowWidth - width) / 2;
-    var y = (windowHeight - height) / 2;
+    const x = (windowWidth - width) / 2;
+    const y = (windowHeight - height) / 2;
     cnv.position(x, y);
     background("#374752");
 
@@ -61,7 +61,7 @@ function setup() {
     freqRange.addClass("customSliders");
 
     player = new Player();
-    setInterval(function () {
+    setInterval(() => {
         if (isPlaying && !gameOver) {
             enemies.push(new Enemy(random(width), -50, 30, 20));
         }
@@ -83,7 +83,7 @@ function draw() {
     if (csound && isPlaying && !gameOver) {
         enemies.forEach((e) => {
             e.display();
-            let distance = e.position.dist(player.position);
+            const distance = e.position.dist(player.position);
             if (distance < 30) {
                 gameOver = true;
                 enemies = [];
@@ -136,7 +136,7 @@ class Player {
         fill(this.colour);
         stroke(255);
         ellipse(this.position.x, this.position.y, this.w);
-        let xPos = map(frequency, freqRange.value(), 300, 0, width);
+        const xPos = map(frequency, freqRange.value(), 300, 0, width);
         this.position.x = xPos;
     }
 }

@@ -32,8 +32,8 @@ async function preload() {
 //create canvas
 function setup() {
   var cnv = createCanvas(800, 200);
-  var x = (windowWidth - width) / 2;
-  var y = (windowHeight - height) / 2;
+  const x = (windowWidth - width) / 2;
+  const y = (windowHeight - height) / 2;
   cnv.position(x, y);
   audioImagePos = { x: width - 50, y: height - 50, w: 32, h: 32 };
 }
@@ -62,7 +62,6 @@ async function mousePressed() {
     }
     else {
       await csound.resume();
-      print("resuming");
       audioState = true;
     }
   }

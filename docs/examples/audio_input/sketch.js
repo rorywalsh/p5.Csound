@@ -55,12 +55,12 @@ function draw() {
         fill(255);
 
         for (var i = 0; i < balls.length; i++) {
-            var wind = createVector(0.01, 0);
-            var gravity = createVector(0, random(0.5) * balls[i].mass);
+            const wind = createVector(0.01, 0);
+            const gravity = createVector(0, random(0.5) * balls[i].mass);
 
-            var c = 0.03;
+            const c = 0.03;
 
-            var friction = balls[i].velocity.copy();
+            const friction = balls[i].velocity.copy();
             friction.mult(-1);
             friction.normalize();
             friction.mult(c);

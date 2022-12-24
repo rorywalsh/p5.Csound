@@ -50,14 +50,14 @@ function draw() {
     text("Click with the mouse to play sample..", width / 2, height / 2);
   } else {
 
-    let freqData = new Uint8Array(fft.frequencyBinCount);
+    const freqData = new Uint8Array(fft.frequencyBinCount);
     fft.getByteFrequencyData(freqData);
 
     noStroke();
     fill(colour);
     for (let i = 0; i < freqData.length; i++) {
-      let x = map(i, 0, freqData.length / 4, 0, width);
-      let h = -height + map(freqData[i], 0, 255, height, 0);
+      const x = map(i, 0, freqData.length / 4, 0, width);
+      const h = -height + map(freqData[i], 0, 255, height, 0);
       rect(x, height, width / freqData.length, h);
     }
   }

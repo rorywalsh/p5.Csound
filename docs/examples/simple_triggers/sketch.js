@@ -32,8 +32,8 @@ endin
 //create canvas
 function setup() {
   var cnv = createCanvas(800, 400);
-  var x = (windowWidth - width) / 2;
-  var y = (windowHeight - height) / 2;
+  const x = (windowWidth - width) / 2;
+  const y = (windowHeight - height) / 2;
   cnv.position(x, y);
   background("#374752");
   audioImagePos = {x:width-50, y:height-50, w:32, h:32};
@@ -55,9 +55,9 @@ function draw() {
     text("Please wait while Csound loads..", width / 2, height / 2);
   }
 
-  for (let i = 0; i < balls.length; i++) {
-    balls[i].display();
-  }
+  balls.forEach( ball => {
+    ball.display();
+  });
 
 
   image(audioState ? audioOn : audioOff, audioImagePos.x, audioImagePos.y, audioImagePos.w, audioImagePos.h);
@@ -115,7 +115,7 @@ class Ball {
 
   triggerSound() {
     if (csound) {
-      let freq = random(1000);
+      const freq = random(1000);
       csound.evalCode(`schedule(1, 0, 5, .1, ${freq})`);
     }
   }

@@ -38,7 +38,7 @@ async function preload() {
   freqData = new Uint8Array(fft.frequencyBinCount);
   fft.getByteFrequencyData(freqData);
 
-  for (let i = 0; i < freqData.length; i++) {
+  for (const s in freqData) {
     stars.push(new Star(random(width), random(height), random(1, 30)));
   }
 }
@@ -46,8 +46,8 @@ async function preload() {
 //create canvas
 function setup() {
   var cnv = createCanvas(800, 400);
-  var x = (windowWidth - width) / 2;
-  var y = (windowHeight - height) / 2;
+  const x = (windowWidth - width) / 2;
+  const y = (windowHeight - height) / 2;
   cnv.position(x, y);
   audioImagePos = {x:width-50, y:height-50, w:32, h:32};
 }
@@ -58,11 +58,11 @@ function draw() {
   stroke(100, 100, 100);
   if (csound && fft != null) {
 
-    let freqData = new Uint8Array(fft.frequencyBinCount);
+    const freqData = new Uint8Array(fft.frequencyBinCount);
     fft.getByteFrequencyData(freqData);
 
     for (let i = 0; i < freqData.length; i++) {
-      let x = map(i, 0, freqData.length, -50, width + 50);
+      const x = map(i, 0, freqData.length, -50, width + 50);
       stars[i].size = map(freqData[i], 0, 255, 2, 40);
       stars[i].display();
     }
