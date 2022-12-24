@@ -19,8 +19,8 @@ async function preload() {
 
   await csound.evalCode(`
   instr 1
-    a1, a2 diskin2 "piano.wav", 1, 0, 1
-    outs a1, a2
+    aL, aR diskin2 "piano.wav", 1, 0, 1
+    out(aL, aR)
   endin
   `);
 

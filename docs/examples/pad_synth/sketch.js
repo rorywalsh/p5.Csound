@@ -19,46 +19,46 @@ async function preload() {
 
   await csound.evalCode(`
     ;the following tables are used to allow morphing between timbres
-    giTableIndices ftgen 100, 0, 4, -2, 1, 2, 3, 4
-    giWavetable ftgen 10, 0, 4096, 10, 1
-    giWave1 ftgen 1, 0, 4096, 10, 1, .5, .25, .017, 0.01
-    giWave2 ftgen 2, 0, 4096, 10, 1, 1, 1, 1, 1, 1
-    giWave3 ftgen 3, 0, 4096, 10, 1, 0, .25, 0, 0.01
-    giWave4 ftgen 4, 0, 4096, 10, 0, 0.5, .75, 0.5,  .1, 0, 0.1
+    giTableIndices = ftgen(100, 0, 4, -2, 1, 2, 3, 4)
+    giWavetable = ftgen(10, 0, 4096, 10, 1)
+    giWave1 = ftgen(1, 0, 4096, 10, 1, .5, .25, .017, 0.01)
+    giWave2 = ftgen(2, 0, 4096, 10, 1, 1, 1, 1, 1, 1)
+    giWave3 = ftgen(3, 0, 4096, 10, 1, 0, .25, 0, 0.01)
+    giWave4 = ftgen(4, 0, 4096, 10, 0, 0.5, .75, 0.5,  .1, 0, 0.1)
 
     ;the next 100 tables are only for display purposes
     iCnt = 0
     while iCnt < 100 do
-        giMorphedTable ftgen 200+iCnt, 0, 4096, 10, 1
+        iMorphedTable = ftgen(200+iCnt, 0, 4096, 10, 1)
         iCnt +=1
     od
 
     ;simple generative synth which calls itself recursively. 
     instr 1
-        iNotes[] fillarray 48, 60, 67, 65, 62, 53 
-        iDurs[] fillarray 2, 2.5, 3, 4
-        kArp[] fillarray 5, 7, -5, 0
-        kEnv = madsr(1, .2, .9, 1)
-        iAmp = random(0.2, 0.4)
-        kDetune jspline .01, 0.1, .3
-        a1 oscili (iAmp*kEnv)/3, cpsmidinn(iNotes[p4]), giWavetable
-        a2 oscili (iAmp*kEnv)/3, cpsmidinn(iNotes[p4])*1+kDetune, giWavetable
-        a3 oscili (iAmp*kEnv)/3, cpsmidinn(iNotes[p4])/2, giWavetable
+        iNotes[] = fillarray(48, 60, 67, 65, 62, 53)
+        iDurs[] = fillarray(2, 2.5, 3, 4)
+        kArp[] = fillarray(5, 7, -5, 0)
+        kEnv = madsr:k(1, .2, .9, 1)
+        iAmp = random:i(0.2, 0.4)
+        kDetune = jspline:k(.01, 0.1, .3)
+        a1 = oscili:a((iAmp*kEnv)/3, cpsmidinn(iNotes[p4]), giWavetable)
+        a2 = oscili:a((iAmp*kEnv)/3, cpsmidinn(iNotes[p4])*1+kDetune, giWavetable)
+        a3 = oscili:a((iAmp*kEnv)/3, cpsmidinn(iNotes[p4])/2, giWavetable)
 
         aMix = a1+a2+a3
-        aMix lpf18 aMix, 1000, abs(kDetune)*10, 0.0
+        aMix = lpf18(aMix, 1000, abs(kDetune)*10, 0.0)
         aL, aR pan2 aMix, abs(jspline:k(1, .1, .2))
         aRevL, aRevR reverbsc aL, aR, .99, 1000 
-        outs aRevL*kEnv, aRevR*kEnv
+        out(aRevL*kEnv, aRevR*kEnv)
         schedule(1, p3-1, iDurs[random(0, 4)], int(random(0, 5)))
     endin
     
     ;this instrument is always running, and constantly updates the wavetable
     ;it also notifies our sketch about the index of the current table
     instr TableManager
-        kIndex jspline 3, 0.1, 0.5
-        ftmorf abs(kIndex), giTableIndices, giWavetable
-        chnset abs(kIndex), "currentIndex"
+        kIndex = jspline:k(3, 0.1, 0.5)
+        ftmorf(abs(kIndex), giTableIndices, giWavetable)
+        chnset(kIndex, "currentIndex")
     endin
 
     schedule("TableManager", 0, 99999)
@@ -67,7 +67,7 @@ async function preload() {
     instr MorphedTables
         if p4 < 100 then
             kIndex = 1+divz(p4, 100, 0)*3
-            ftmorf kIndex, giTableIndices, 200+p4
+            ftmorf(abs(kIndex), giTableIndices, 200+p4)
             schedule("MorphedTables", 0, .1, p4+1)
         endif
     endin
