@@ -20,36 +20,43 @@ async function preload() {
     csound = await Csound.create({ options: ['-odac', '--0dbfs=1'] });
 
     await csound.evalCode(`
-	;create tables 1-9
-	indx = 1
-	while indx < 9 do
-		ifn = ftgen(indx, 0, ${numBeats}, 2, 0)
-		indx += 1
-	od
 
-    giNotes[] = fillarray(800, 700, 600, 500, 400, 300, 200, 100)
+    ifn1 ftgen 1, 0, ${numBeats}, 2, 0
+    ifn2 ftgen 2, 0, ${numBeats}, 2, 0
+    ifn3 ftgen 3, 0, ${numBeats}, 2, 0
+    ifn4 ftgen 4, 0, ${numBeats}, 2, 0
+    ifn5 ftgen 5, 0, ${numBeats}, 2, 0
+    ifn6 ftgen 6, 0, ${numBeats}, 2, 0
+    ifn7 ftgen 7, 0, ${numBeats}, 2, 0
+    ifn8 ftgen 8, 0, ${numBeats}, 2, 0
 
-    opcode triggerIfHitEnabled, 0,ki
-        kIndex, iTable xin
-        kValue = table:k(kIndex, iTable)
-        kDur = 1;chnget:k("duration")
-        kFilterCutoff = chnget:k("filterCutoff")
+    opcode triggerIfHitEnabled, 0,kii
+        kIndex, iTable, iNote xin
+        kValue table kIndex, iTable
+        kDur chnget "duration"
+        kFilterCutoff chnget "filterCutoff"
         if kValue == 1 then
-            schedulek(2, 0, kDur, giNotes[iTable-1], kFilterCutoff)
-        endif
-        if iTable > 1 then
-	        triggerIfHitEnabled(kIndex,iTable-1)
+            event "i", 2, 0, kDur, iNote, kFilterCutoff   
         endif
     endop
 
     instr 1
+        iNotes[] fillarray 800, 700, 600, 500, 400, 300, 200, 100 
         kIndex init -1
-        kBpm = chnget("BPM")
+        kBpm chnget "BPM"
+
         if chnget:k("play") == 1 then      
             chnset kIndex, "index"
             if metro(kBpm/60) == 1 then
-                triggerIfHitEnabled(kIndex, 8)
-                kIndex = (kIndex % 15) + 1 
+                triggerIfHitEnabled(kIndex, 1, iNotes[0])
+                triggerIfHitEnabled(kIndex, 2, iNotes[1])
+                triggerIfHitEnabled(kIndex, 3, iNotes[2])
+                triggerIfHitEnabled(kIndex, 4, iNotes[3])
+                triggerIfHitEnabled(kIndex, 5, iNotes[4])
+                triggerIfHitEnabled(kIndex, 6, iNotes[5])
+                triggerIfHitEnabled(kIndex, 7, iNotes[6])
+                triggerIfHitEnabled(kIndex, 8, iNotes[7])
+                kIndex = kIndex < 15 ? kIndex+1 : 0
             endif      
         endif
     endin
@@ -58,20 +65,22 @@ async function preload() {
     schedule(3, 0, 99999)
 
     instr 2
-        kEnv = expseg:k(0.001, 0.01, 1/16, p3, 0.001)
-        aSig = oscili:a(kEnv, p4)
+        print p3
+        kEnv expseg 0.001, 0.01, 1/16, p3, 0.001
+        aSig oscili kEnv, p4
+        iPan random 0, 1
         aLeft, aRight pan2 aSig, random:i(0, 1)
         chnmix aLeft, "mixL"
         chnmix aRight, "mixR"
-        out(aLeft, aRight)
+        outs aLeft, aRight
     endin
 
     instr 3
-        kFdbk = chnget:k("reverbTime")
-        aSigL = chnget:a("mixL")
-        aSigR = chnget:a("mixR")
+        kFdbk chnget "reverbTime"
+        aSigL chnget "mixL"
+        aSigR chnget "mixR"
         aL, aR reverbsc aSigL, aSigR, kFdbk, 500
-        out(aL, aR)
+        outs aL, aR
         chnclear "mixL", "mixR"
     endin
   `);
@@ -204,12 +213,12 @@ async function changeReverb() {
 }
 
 function generatePattern() {
-    for (const v in voices) {
+    for (let i = 0; i < numberOfVoices; i++) {
         let phrase = [];
         for (let x = 0; x < numBeats; x++) {
             phrase[x] = random(1) > randomWeightSlider.value() ? 0 : 1;
         }
-        v.beatArray = phrase;
+        voices[i].beatArray = phrase;
     }
     updateCsoundTables();
 }

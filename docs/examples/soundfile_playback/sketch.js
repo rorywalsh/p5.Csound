@@ -66,9 +66,9 @@ async function mousePressed() {
     }
   }
   else {
-    print("stating")
       Csound.startAudio();
-      if (csound) {
+      if (csound && isPlaying == false) {
+        isPlaying = true;
         await csound.evalCode(`schedule(1, 0, 10)`); //play sample for 10 seconds
       }
     }

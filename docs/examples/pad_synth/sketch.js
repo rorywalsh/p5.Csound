@@ -58,7 +58,7 @@ async function preload() {
     instr TableManager
         kIndex = jspline:k(3, 0.1, 0.5)
         ftmorf(abs(kIndex), giTableIndices, giWavetable)
-        chnset(kIndex, "currentIndex")
+        chnset(abs(kIndex), "currentIndex")
     endin
 
     schedule("TableManager", 0, 99999)
