@@ -1,5 +1,5 @@
 let csound = null;
-var audioSample = new Array(1000);
+var audioSamples = new Array(1000);
 let amplitude;
 let audioOn, audioOff, audioState=true;
 let audioImagePos;
@@ -24,8 +24,7 @@ async function preload() {
 
     await csound.start();
 
-    //query the amplitude every 50ms..
-    setInterval(async function () {
+    setInterval(async() => {
         amplitude = await csound.getControlChannel("amp");
     }, 10);
 
@@ -45,18 +44,18 @@ function draw() {
     background("#374752");
     if (csound && isPlaying) {
         // add new level to end of array
-        audioSample.push(amplitude);
+        audioSamples.push(amplitude);
 
         // remove first item in array
-        audioSample.splice(0, 1);
+        audioSamples.splice(0, 1);
 
         // loop through all the previous levels
-        for (var i = 0; i < audioSample.length; i++) {
+        for (const audioSample of audioSamples) {
             //maps x index according to number of samples in array
             //saves us from having to calculate the x-spacing
-            var x = map(i, audioSample.length, 0, 0, width);
+            var x = map(i, audioSamples.length, 0, 0, width);
             //get a height level for each sample
-            var h = map(audioSample[i], 0, 0.5, 1, height);
+            var h = map(audioSample, 0, 0.5, 1, height);
 
             strokeWeight(0)
             fill("#46B5CB");
