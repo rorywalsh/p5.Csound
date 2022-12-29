@@ -51,9 +51,11 @@ async function preload() {
 
     await csound.start();
 
-    setInterval(async () => {
+    let getIndex = setInterval(async () => {
         currentSample = await csound.getControlChannel("sampleIndex");
     }, 10);
+
+    csound.on("stop", () => clearInterval(getIndex));
 
 }
 

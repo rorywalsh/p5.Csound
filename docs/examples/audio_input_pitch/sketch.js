@@ -37,10 +37,11 @@ async function preload() {
     await csound.setControlChannel("micThreshold", 0.2);
 
 
-    setInterval(async () => {
+    let getFreq = setInterval(async () => {
         frequency = await csound.getControlChannel("freq");
     }, 50);
 
+    csound.on("stop", () => clearInterval(getFreq));
 }
 
 //create canvas

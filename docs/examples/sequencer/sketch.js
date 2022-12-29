@@ -92,9 +92,11 @@ async function preload() {
     await csound.setControlChannel("duration", 0.5);
     await csound.setControlChannel("filterCutoff", 500);
 
-    setInterval(async function () {
+    let getIndex = setInterval(async function () {
         currentPos = await csound.getControlChannel("index");
     }, 10);
+
+    csound.on("stop", () => clearInterval(getIndex));
 
 }
 

@@ -27,9 +27,11 @@ async function preload() {
     await csound.start();
 
     //query the amplitude every 50ms..
-    setInterval(async function () {
+    let getRMS = setInterval(async function () {
         amplitude = await csound.getControlChannel("rms");
     }, 50);
+
+    csound.on("stop", () => clearInterval(getRMS));
 }
 
 //create canvas
