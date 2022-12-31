@@ -30,16 +30,6 @@ async function preload() {
 
     giNotes[] = fillarray(800, 700, 600, 500, 400, 300, 200, 100)
 
-    // opcode triggerIfHitEnabled, 0,kii
-    //     kIndex, iTable, iNote xin
-    //     kValue table kIndex, iTable
-    //     kDur chnget "duration"
-    //     kFilterCutoff chnget "filterCutoff"
-    //     if kValue == 1 then
-    //         event "i", 2, 0, kDur, iNote, kFilterCutoff   
-    //     endif
-    // endop
-
     opcode triggerIfHitEnabled, 0,ki
         kIndex, iTable xin
         kValue = table:k(kIndex, iTable)

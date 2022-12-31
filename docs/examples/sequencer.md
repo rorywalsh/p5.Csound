@@ -15,43 +15,37 @@ async function preload() {
 
     await csound.evalCode(`
 
-    ifn1 ftgen 1, 0, ${numBeats}, 2, 0
-    ifn2 ftgen 2, 0, ${numBeats}, 2, 0
-    ifn3 ftgen 3, 0, ${numBeats}, 2, 0
-    ifn4 ftgen 4, 0, ${numBeats}, 2, 0
-    ifn5 ftgen 5, 0, ${numBeats}, 2, 0
-    ifn6 ftgen 6, 0, ${numBeats}, 2, 0
-    ifn7 ftgen 7, 0, ${numBeats}, 2, 0
-    ifn8 ftgen 8, 0, ${numBeats}, 2, 0
+   ;create tables 1-9
+	indx = 1
+	while indx < 9 do
+		ifn = ftgen(indx, 0, ${numBeats}, 2, 0)
+		indx += 1
+	od
 
-    opcode triggerIfHitEnabled, 0,kii
-        kIndex, iTable, iNote xin
-        kValue table kIndex, iTable
-        kDur chnget "duration"
-        kFilterCutoff chnget "filterCutoff"
+    giNotes[] = fillarray(800, 700, 600, 500, 400, 300, 200, 100)
+
+    opcode triggerIfHitEnabled, 0,ki
+        kIndex, iTable xin
+        kValue = table:k(kIndex, iTable)
+        kDur = chnget:k("duration")
+        kFilterCutoff = chnget:k("filterCutoff")
         if kValue == 1 then
-            event "i", 2, 0, kDur, iNote, kFilterCutoff   
+            schedulek(2, 0, kDur, giNotes[iTable-1], kFilterCutoff)
+        endif
+        if iTable > 1 then
+	        triggerIfHitEnabled(kIndex,iTable-1)
         endif
     endop
 
     instr 1
-        iNotes[] fillarray 800, 700, 600, 500, 400, 300, 200, 100 
-        kIndex init 0
-        kBpm chnget "BPM"
-
+        kIndex init -1
+        kBpm = chnget:k("BPM")
         if chnget:k("play") == 1 then      
-            chnset kIndex, "index"
+            chnset:k(kIndex, "index")
             if metro(kBpm/60) == 1 then
-                triggerIfHitEnabled(kIndex, 1, iNotes[0])
-                triggerIfHitEnabled(kIndex, 2, iNotes[1])
-                triggerIfHitEnabled(kIndex, 3, iNotes[2])
-                triggerIfHitEnabled(kIndex, 4, iNotes[3])
-                triggerIfHitEnabled(kIndex, 5, iNotes[4])
-                triggerIfHitEnabled(kIndex, 6, iNotes[5])
-                triggerIfHitEnabled(kIndex, 7, iNotes[6])
-                triggerIfHitEnabled(kIndex, 8, iNotes[7])
+                triggerIfHitEnabled(kIndex, 8)
                 kIndex = kIndex < 15 ? kIndex+1 : 0
-            endif        
+            endif      
         endif
     endin
 
@@ -59,22 +53,20 @@ async function preload() {
     schedule(3, 0, 99999)
 
     instr 2
-        print p3
-        kEnv expseg 0.001, 0.01, 1/16, p3, 0.001
-        aSig oscili kEnv, p4
-        iPan random 0, 1
+        kEnv = expseg:k(0.001, 0.01, 1/16, p3, 0.001)
+        aSig = oscili:a(kEnv, p4)
         aLeft, aRight pan2 aSig, random:i(0, 1)
         chnmix aLeft, "mixL"
         chnmix aRight, "mixR"
-        outs aLeft, aRight
+        out(aLeft, aRight)
     endin
 
     instr 3
-        kFdbk chnget "reverbTime"
-        aSigL chnget "mixL"
-        aSigR chnget "mixR"
+        kFdbk = chnget:k("reverbTime")
+        aSigL = chnget:a("mixL")
+        aSigR = chnget:a("mixR")
         aL, aR reverbsc aSigL, aSigR, kFdbk, 500
-        outs aL, aR
+        out(aL, aR)
         chnclear "mixL", "mixR"
     endin
   `);
@@ -92,9 +84,9 @@ async function preload() {
 }
 ```
 
-The Csound code begins by creating 8 function tables of `numBeats` size. These correspond to each horizontal track you see in the sequencer. The next section of code creates a simple User Defined Opcode (UDO) that tests if a cell is enabled. If so it will trigger instrument 2 to play. Instrument 2 is a simple sinewave synth, with an exponential envelop and random panning. The synth also outputs a signal to the main reverb instrument which is always running in the background.  
+The Csound code begins by creating 8 function tables of `numBeats` size. These correspond to each horizontal track you see in the sequencer. The next section of code creates a simple User Defined Opcode (UDO) that tests if a cell is enabled. If so it will trigger instrument 2 to play. The UDO is recursive. Every time it is called it will in turn call itself 8 times, once for each table. Instrument 2 is a simple sine wave synth, with an exponential envelop and random panning. The synth also outputs a signal to the main reverb instrument which is always running in the background.  
 
-Instrument 1 is the main sequencer instrument and it is running from the moment the sketch loads. The first thing it does is create a table of note values. In this instance, each note is a successive harmonic from the natural harmonic series. It uses a metro to time the events. The BPM comes from the BPM slider, which when moved sends BPM values to a channel called `"BPM"`. On each beat, the index of each table is queried using the `triggerIfHitEnabled` opcode. If a cell is enabled a note it played. 
+Instrument 1 is the main sequencer instrument and it is running from the moment the sketch loads. The first thing it does is create a table of note values. In this instance, each note is a successive harmonic from the natural harmonic series. It uses a metro to time the events. The BPM comes from the BPM slider, which when moved sends BPM values to a channel called `"BPM"`. On each beat, the index of each table is queried using the `triggerIfHitEnabled` opcode. If a cell is enabled a note is played. 
 
 User interaction with the grid is handled via the `mousePressed()` function.
 
