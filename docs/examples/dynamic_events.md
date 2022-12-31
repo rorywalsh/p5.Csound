@@ -15,14 +15,13 @@ async function preload() {
 
   csound = await Csound.create({options:['-odac', '--0dbfs=1']});
   await csound.evalCode(`
-  giWavetable ftgen 1, 0, 4096, 10, 1, 1/2, 1/3, 1/4, 1/5, 1/6, 1/7 
-
+  giWavetable = ftgen(1, 0, 4096, 10, 1, 1/2, 1/3, 1/4, 1/5, 1/6, 1/7)
   instr 1
     iDecay = p4*.25
-    kEnv expon iDecay, p3, 0.001
-    aSig oscili kEnv, p5, giWavetable
-    aFlt moogladder aSig, p4*10000, .2
-    outs aFlt, aFlt
+    kEnv = expon:k(iDecay, p3, 0.001)
+    aSig = oscili:a(kEnv, p5, giWavetable)
+    aFlt = moogladder(aSig, p4*10000, .2)
+    outall(aFlt)
   endin
   `);
 

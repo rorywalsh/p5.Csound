@@ -21,7 +21,7 @@ async function preload() {
   await csound.evalCode(`
   instr 1
     a1, a2 diskin2 "pianoMood.wav", 1, 0, 1
-    outs a1, a2
+    outall(a1, a2)
   endin
   `);
 
@@ -77,11 +77,11 @@ The instrument that plays is a simple generative synth that triggers itself to p
 ```js
   await csound.evalCode(`
   instr 1
-    aEnv linen rnd(0.2), p3/2, p3, p3/2
-    a1 oscili aEnv, rnd(1000)
-    outs a1, a1
-    schedule(1, rnd(3), 10)
-  endin
+    aEnv = linen:a(rnd:i(0.2), p3/2, p3, p3/2)
+    aSnd = oscili:a(aEnv, rnd:i(1000))
+    outall(aSnd)
+    schedule(1, rnd:i(3), 10)
+  endin 
   `);
   ```
 

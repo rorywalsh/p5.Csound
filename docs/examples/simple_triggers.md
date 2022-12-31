@@ -15,14 +15,14 @@ async function preload() {
     csound = await Csound.create({options:['-odac', '--0dbfs=1']});
 
     await csound.evalCode(`
-    instr 1
-    iDur = p3
-    iAmp = p4
-    iFreq = p5;
-    aEnv expon iAmp, iDur, 0.001
-    aSig oscil aEnv, iFreq
-    outs aSig, aSig
-    endin
+instr 1
+  iDur = p3
+  iAmp = p4
+  iFreq = p5;
+  aEnv = expon:a(iAmp, iDur, 0.001)
+  aSig = oscili:a(aEnv, iFreq)
+  outall(aSig)
+endin
     `);
   await csound.start();
 }

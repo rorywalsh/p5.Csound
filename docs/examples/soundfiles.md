@@ -19,8 +19,8 @@ async function preload() {
 
   await csound.evalCode(`
   instr 1
-    a1, a2 diskin2 "piano.wav", 1, 0, 1
-    outs a1, a2
+    aL, aR diskin2 "piano.wav", 1, 0, 1
+    out(aL, aR)
   endin
   `);
 
@@ -64,26 +64,25 @@ async function preload() {
     csound = await Csound.create({ options: ["-odac", "--0dbfs=1"] });
 
     await csound.evalCode(`
-
-  giSoundfile ftgen 1, 0, 2, 2, 0
+  giSoundfile = ftgen(1, 0, 2, 2, 0)
   
   instr 1
-
-    iLen ftlen giSoundfile
+    prints("Sample playback started")
+    iLen = ftlen(giSoundfile)
     kIndex init 0
     setksmps 1
     
-    aTab tab a(kIndex), giSoundfile
-    outs aTab, aTab
-    kIndex = kIndex<(iLen-1) ? kIndex+1 : 0    
-    chnset kIndex, "sampleIndex"
+    aTab = table:a(a(kIndex), giSoundfile)
+    outall(aTab)
+    kIndex = kIndex%(iLen-1) + 1    
+    chnset(kIndex, "sampleIndex")
 
-    kIncomingIndexUpdate chnget "newIndexUpdate"
+    kIncomingIndexUpdate = chnget:k("newIndexUpdate")
     if changed(kIncomingIndexUpdate) == 1 then
-      kIndex chnget "newIndex"
+      kIndex = chnget("newIndex")
     endif
 
-    kStop chnget "stop"
+    kStop = chnget:k("stop")
     if kStop == 1 then
       turnoff
     endif 
