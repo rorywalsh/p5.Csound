@@ -43,7 +43,7 @@ async function preload() {
     opcode triggerIfHitEnabled, 0,ki
         kIndex, iTable xin
         kValue = table:k(kIndex, iTable)
-        kDur = 1;chnget:k("duration")
+        kDur = chnget:k("duration")
         kFilterCutoff = chnget:k("filterCutoff")
         if kValue == 1 then
             schedulek(2, 0, kDur, giNotes[iTable-1], kFilterCutoff)
@@ -55,9 +55,9 @@ async function preload() {
 
     instr 1
         kIndex init -1
-        kBpm chnget "BPM"
+        kBpm = chnget:k("BPM")
         if chnget:k("play") == 1 then      
-            chnset kIndex, "index"
+            chnset:k(kIndex, "index")
             if metro(kBpm/60) == 1 then
                 triggerIfHitEnabled(kIndex, 8)
                 kIndex = kIndex < 15 ? kIndex+1 : 0
@@ -69,22 +69,20 @@ async function preload() {
     schedule(3, 0, 99999)
 
     instr 2
-        print p3
-        kEnv expseg 0.001, 0.01, 1/16, p3, 0.001
-        aSig oscili kEnv, p4
-        iPan random 0, 1
+        kEnv = expseg:k(0.001, 0.01, 1/16, p3, 0.001)
+        aSig = oscili:a(kEnv, p4)
         aLeft, aRight pan2 aSig, random:i(0, 1)
         chnmix aLeft, "mixL"
         chnmix aRight, "mixR"
-        outs aLeft, aRight
+        out(aLeft, aRight)
     endin
 
     instr 3
-        kFdbk chnget "reverbTime"
-        aSigL chnget "mixL"
-        aSigR chnget "mixR"
+        kFdbk = chnget:k("reverbTime")
+        aSigL = chnget:a("mixL")
+        aSigR = chnget:a("mixR")
         aL, aR reverbsc aSigL, aSigR, kFdbk, 500
-        outs aL, aR
+        out(aL, aR)
         chnclear "mixL", "mixR"
     endin
   `);
