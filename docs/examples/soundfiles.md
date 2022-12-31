@@ -92,9 +92,11 @@ async function preload() {
 
     await csound.start();
 
-    setInterval(async function () {
+    let getIndex = setInterval(async () => {
         currentSample = await csound.getControlChannel("sampleIndex");
     }, 10);
+
+    csound.on("stop", () => clearInterval(getIndex));
 }
 ```
 
@@ -102,7 +104,7 @@ The first line of Csound code declares a function table. Its size and GEN routin
 
 The next section of Csound code listens for changes to a channel called `"newIndexUpdate"`. Whenever its value changes, it queries the `"newIndex"` channel, which will contain the current playback position. (More on this below). The final piece of Csound code listens to channel `"stop"`. Whenever it is 1, the instrument will be terminated. 
 
-Finally, an async function is started, and will be called every 10 milliseconds. Its job is to get the current playhead position, which is stored in the `"sampleIndex"` channel. The `currentSample` variable is then used to position the playback scrubber. Calling `getControlChannel()` on every frame inside your `draw()` can lead to some odd behavior, because the program must wait for the function to return. Using a timed function with `setInterval()` avoids the need to turn the draw function into an async function, and removes an issues with drawing.
+Finally, an async function is started, and will be called every 10 milliseconds. Its job is to get the current playhead position, which is stored in the `"sampleIndex"` channel. The `currentSample` variable is then used to position the playback scrubber. Calling `getControlChannel()` on every frame inside your `draw()` can lead to some odd behavior, because the program must wait for the function to return. Using a timed function with `setInterval()` avoids the need to turn the draw function into an async function, and removes an issues with drawing. It's important to clear the interval function when Csound stops so we don't leak any memory. This is done using the [`csound.on()`](https://github.com/csound/csound/tree/master/wasm/browser#CsoundObj.on) event listener. 
 
 The setup function create 2 DOM elements, a button for play/stop and a file input button. The styling of these is done in the corresponding CSS file. Each button is assigned a callback function for when they are pressed. The file input button will trigger the following method when it is pressed.
 
