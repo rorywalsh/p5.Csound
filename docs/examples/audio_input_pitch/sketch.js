@@ -1,3 +1,5 @@
+import { Csound } from "@csound/browser";
+
 let csound = null;
 let enemies = [];
 let isPlaying = false;
@@ -104,6 +106,7 @@ function draw() {
 
 
 async function mousePressed() {
+    Csound.startAudio();
     if (!isPlaying) {
         isPlaying = true;
         await csound.evalCode("schedule(1, 0, 9999)");

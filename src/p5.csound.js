@@ -33,13 +33,8 @@ export const create = async (args = {}) => {
   return csoundObj;
 };
 
-export const startAudio = async () => {
-  let ctx = await csound.getAudioContext();
-  ctx.resume();
-  await csound.start();
-}
 
-export const start = async () => {
+export const startAudio = async () => {
   const startPromise = csoundObj.start();
   csoundObj.once("onAudioNodeCreated", (ctx) => {
       if (ctx.state === "suspended") {

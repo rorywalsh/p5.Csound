@@ -7,7 +7,7 @@ let csound = null;
 let pos = 0;
 let numberOfVoices = 8;
 let currentPos = 0;
-let audioOn, audioOff, audioState=true;
+let audioOn, audioOff, audioState = true;
 let audioImagePos;
 
 /* p5.Csound sequencer example RW 2022 */
@@ -136,7 +136,7 @@ function setup() {
     for (let i = 0; i < numberOfVoices; i++)
         voices.push(new SequencerVoice(i, 55, 5 + i * 45, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
 
-    audioImagePos = {x:width-50, y:height-50, w:32, h:32};
+    audioImagePos = { x: width - 50, y: height - 50, w: 32, h: 32 };
 }
 
 function updateCsoundTables() {

@@ -3,7 +3,7 @@ let isPlaying = false;
 let numTables = 100;
 let tables = [];
 let currentIndex = 0;
-let audioOn, audioOff, audioState=true;
+let audioOn, audioOff, audioState = true;
 let audioImagePos;
 
 
@@ -12,12 +12,12 @@ let audioImagePos;
 
 async function preload() {
 
-  audioOn = loadImage("../audio_on.png");
-  audioOff = loadImage("../audio_off.png");
+    audioOn = loadImage("../audio_on.png");
+    audioOff = loadImage("../audio_off.png");
 
-  csound = await Csound.create({options:['-odac', '--0dbfs=1']});
+    csound = await Csound.create({ options: ['-odac', '--0dbfs=1'] });
 
-  await csound.evalCode(`
+    await csound.evalCode(`
     ;the following tables are used to allow morphing between timbres
     giTableIndices = ftgen(100, 0, 4, -2, 1, 2, 3, 4)
     giWavetable = ftgen(10, 0, 4096, 10, 1)
@@ -76,12 +76,12 @@ async function preload() {
     `);
 
     await csound.setControlChannel("tableIndex", 1);
-    await csound.start();  
+    await csound.start();
 
     //set to run 20 times a second. a JS timer is fine here because it's
     //only for display purposes 
-    let getCurrentIndex = setInterval(async () =>{
-        currentIndex = Math.floor(map(await csound.getControlChannel("currentIndex"), 0, 3, 0, numTables-1)); 
+    let getCurrentIndex = setInterval(async () => {
+        currentIndex = Math.floor(map(await csound.getControlChannel("currentIndex"), 0, 3, 0, numTables - 1));
     }, 50);
 
     csound.on("stop", () => clearInterval(getCurrentIndex));
@@ -89,57 +89,58 @@ async function preload() {
 
 //create canvas
 async function setup() {
-  var cnv = createCanvas(800, 400);
-  const x = (windowWidth - width) / 2;
-  const y = (windowHeight - height) / 2;
-  cnv.position(x, y);
-  audioImagePos = {x:width-50, y:height-50, w:32, h:32};
+    var cnv = createCanvas(800, 400);
+    const x = (windowWidth - width) / 2;
+    const y = (windowHeight - height) / 2;
+    cnv.position(x, y);
+    audioImagePos = { x: width - 50, y: height - 50, w: 32, h: 32 };
 }
 
 function draw() {
-  background("#374752");
+    background("#374752");
 
-  if (csound && isPlaying) {
-    tables.forEach(t => t.display(currentIndex));
-  }
-  else {
-    textAlign(CENTER);
-    fill(255)
-    text("Press the screen to start", width / 2, height / 2);
-  }
-  image(audioState ? audioOn : audioOff, audioImagePos.x, audioImagePos.y, audioImagePos.w, audioImagePos.h);
+    if (csound && isPlaying) {
+        tables.forEach(t => t.display(currentIndex));
+    }
+    else {
+        textAlign(CENTER);
+        fill(255)
+        text("Press the screen to start", width / 2, height / 2);
+    }
+    image(audioState ? audioOn : audioOff, audioImagePos.x, audioImagePos.y, audioImagePos.w, audioImagePos.h);
 }
 
 //first time a user presses the screen we copy the contents of the 100
 //transitional tables, and create new instances of the Table class
 async function mousePressed() {
-  if(!isPlaying){
-    for( let i = 0 ; i < numTables ; i++){
-        let data = await csound.tableCopyOut(200+i);
-        tables.push(new Table(50+(Math.pow(3, 2+(i/50))), (height*.6)-i, 700-(i*3), 100, i, data));
+    Csound.startAudio()
+    if (!isPlaying) {
+        for (let i = 0; i < numTables; i++) {
+            let data = await csound.tableCopyOut(200 + i);
+            tables.push(new Table(50 + (Math.pow(3, 2 + (i / 50))), (height * .6) - i, 700 - (i * 3), 100, i, data));
+        }
+        //start the main synth
+        await csound.evalCode("schedule(1, 0, 3, 1)");
+        isPlaying = true;
     }
-    //start the main synth
-    await csound.evalCode("schedule(1, 0, 3, 1)");
-    isPlaying = true;
-  }
 
-  if (mouseX > audioImagePos.x && mouseY > audioImagePos.y &&
-    mouseX < audioImagePos.x + audioImagePos.w && mouseY < audioImagePos.y + audioImagePos.h) {
-    if (audioState) {
-        await csound.pause();
-        audioState = false;
+    if (mouseX > audioImagePos.x && mouseY > audioImagePos.y &&
+        mouseX < audioImagePos.x + audioImagePos.w && mouseY < audioImagePos.y + audioImagePos.h) {
+        if (audioState) {
+            await csound.pause();
+            audioState = false;
+        }
+        else {
+            await csound.resume();
+            print("resuming");
+            audioState = true;
+        }
     }
-    else {
-        await csound.resume();
-        print("resuming");
-        audioState = true;
-    }
-}
 }
 
 //Table class that draws a wave shape based on the data passed to it
-class Table{
-    constructor(x, y, w, h, index, data){
+class Table {
+    constructor(x, y, w, h, index, data) {
         this.x = x;
         this.y = y;
         this.w = w;
@@ -147,26 +148,26 @@ class Table{
         this.c = color('#46B5CB');
         this.c.setAlpha(20);
         this.index = index;
-        this.sampleData = data; 
+        this.sampleData = data;
         this.previousY = 0;
         this.previousX = 0;
         this.alphaFade = 0;
     }
 
     //iterate over the contents of the tables and draw their wave shape
-    display(activeTable){
-        this.previousY = map(this.sampleData[0], -1, 1, this.y, this.y+this.h);
+    display(activeTable) {
+        this.previousY = map(this.sampleData[0], -1, 1, this.y, this.y + this.h);
         this.previousX = this.x;
-        for ( let i = 1 ; i < this.sampleData.length ; i+=20){
-            let x = map(i, 0, this.sampleData.length-1, this.x, this.x+this.w);
-            let y = map(this.sampleData[i], -1, 1, this.y, this.y+this.h);
-            strokeWeight(activeTable===this.index ? 3 : 1);
-            
-            if(activeTable === this.index){
+        for (let i = 1; i < this.sampleData.length; i += 20) {
+            let x = map(i, 0, this.sampleData.length - 1, this.x, this.x + this.w);
+            let y = map(this.sampleData[i], -1, 1, this.y, this.y + this.h);
+            strokeWeight(activeTable === this.index ? 3 : 1);
+
+            if (activeTable === this.index) {
                 this.alphaFade = 200;
             }
-            this.c.setAlpha(Math.max(10, this.alphaFade-=0.05));
-            stroke(activeTable === this.index ? color('#46B5CB') : (this.alphaFade>10 ? this.c : color(255, 40)));
+            this.c.setAlpha(Math.max(10, this.alphaFade -= 0.05));
+            stroke(activeTable === this.index ? color('#46B5CB') : (this.alphaFade > 10 ? this.c : color(255, 40)));
             line(this.previousX, this.previousY, x, y);
             this.previousX = x;
             this.previousY = y;

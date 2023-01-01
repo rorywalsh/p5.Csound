@@ -1,7 +1,7 @@
 let csound = null;
 let balls = [];
 let isPlaying = false;
-let audioOn, audioOff, audioState=true;
+let audioOn, audioOff, audioState = true;
 let audioImagePos;
 
 /* This sketch will play a random tone whenever 
@@ -12,7 +12,7 @@ async function preload() {
   audioOn = loadImage("../audio_on.png");
   audioOff = loadImage("../audio_off.png");
 
-  csound = await Csound.create({options:['-odac', '--0dbfs=1']});
+  csound = await Csound.create({ options: ['-odac', '--0dbfs=1'] });
 
   await csound.evalCode(`
 instr 1
@@ -26,7 +26,7 @@ endin
 `);
 
   await csound.start();
-  
+
 }
 
 //create canvas
@@ -36,7 +36,7 @@ function setup() {
   const y = (windowHeight - height) / 2;
   cnv.position(x, y);
   background("#374752");
-  audioImagePos = {x:width-50, y:height-50, w:32, h:32};
+  audioImagePos = { x: width - 50, y: height - 50, w: 32, h: 32 };
 
 }
 
@@ -45,7 +45,7 @@ function draw() {
   fill(255);
 
   if (csound) {
-    if (balls.length == 0){
+    if (balls.length == 0) {
       textAlign(CENTER);
       text("Drag and release with the mouse..", width / 2, height / 2);
     }
@@ -55,7 +55,7 @@ function draw() {
     text("Please wait while Csound loads..", width / 2, height / 2);
   }
 
-  balls.forEach( ball => {
+  balls.forEach(ball => {
     ball.display();
   });
 
@@ -63,19 +63,20 @@ function draw() {
   image(audioState ? audioOn : audioOff, audioImagePos.x, audioImagePos.y, audioImagePos.w, audioImagePos.h);
 }
 
-async function mousePressed(){
-  if(mouseX > audioImagePos.x && mouseY > audioImagePos.y &&
-    mouseX < audioImagePos.x+audioImagePos.w && mouseY < audioImagePos.y+audioImagePos.h){
-      if(audioState){
-        await csound.pause();
-        audioState = false;
-      }
-      else{
-        await csound.resume();
-        print("resuming");
-        audioState = true;
-      }
-   }
+async function mousePressed() {
+  Csound.startAudio()
+  if (mouseX > audioImagePos.x && mouseY > audioImagePos.y &&
+    mouseX < audioImagePos.x + audioImagePos.w && mouseY < audioImagePos.y + audioImagePos.h) {
+    if (audioState) {
+      await csound.pause();
+      audioState = false;
+    }
+    else {
+      await csound.resume();
+      print("resuming");
+      audioState = true;
+    }
+  }
 }
 
 function mouseDragged() {

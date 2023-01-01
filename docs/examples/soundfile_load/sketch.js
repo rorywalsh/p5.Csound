@@ -142,6 +142,7 @@ async function mousePressed() {
 
 async function startStopPlayback() {
     if (csound) {
+        Csound.startAudio()
         if (!isPlaying) {
             await csound.setControlChannel("stop", 0);
             csound.evalCode("schedule(1, 0, 999)");
