@@ -105,7 +105,7 @@ function draw() {
 
 ## Accessing pitch data
 
-Csound ships with quite a few pitch detection opcodes. The following sketch uses the `pitchamdf` opcode to track the incoming pitch and uses it to control the players position on screen. Watch out for enemies! 
+Csound ships with quite a few pitch detection opcodes. The following sketch uses the `pitchamdf` opcode to track the incoming pitch and uses it to control the players position on screen. Use the freq slider to set a comfortable range when you sing and the amp slider to tweak the mic's sensitivity. And watch out for enemies! 
 
 [](/audio_input_pitch/index.html ':include :type=iframe width=800px height=400px frameBorder=0 scrolling="no"')
 <p align="right">
