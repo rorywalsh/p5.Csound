@@ -64,7 +64,8 @@ function draw() {
 }
 
 async function mousePressed() {
-  Csound.startAudio()
+  await Csound.startAudio()
+  console.log(csound);
   if (mouseX > audioImagePos.x && mouseY > audioImagePos.y &&
     mouseX < audioImagePos.x + audioImagePos.w && mouseY < audioImagePos.y + audioImagePos.h) {
     if (audioState) {
