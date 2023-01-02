@@ -1,7 +1,7 @@
 
 ## Audio Input
 
-The following sketch shows how to access live audio input. In this case it is used to trigger an array of balls on the screen.  
+The following sketch shows how to access live audio input. In this case it is used to trigger an array of balls on the screen. Make sure you give the page access to your microphone. Then simply speak loudly into the mic to trigger an event.
 
 [](/audio_input/index.html ':include :type=iframe width=800px height=400px frameBorder=0 scrolling="no"')
 <p align="right">
@@ -11,25 +11,31 @@ The `preload()` function looks like this.
 
 ```js
 async function preload() {
-    csound = await Csound.create({options:['-odac', '-iadc', '--0dbfs=1']});
+    
+    audioOn = loadImage("../audio_on.png");
+    audioOff = loadImage("../audio_off.png");
+
+    csound = await Csound.create({ options: ['-odac', '-iadc', '--0dbfs=1'] });
 
     await csound.evalCode(`
     instr 1
-        a1 inch 1
-        chnset rms(a1), "rms"
+        aIn = inch(1)
+        chnset(rms(aIn), "rms")
     endin
     `);
 
     await csound.start();
 
-    setInterval(async function () {
+    //query the amplitude every 50ms..
+    let getRMS = setInterval(async function () {
         amplitude = await csound.getControlChannel("rms");
     }, 50);
-}
+
+    csound.on("stop", () => clearInterval(getRMS));
 }
 ```
 
-In order to request live input we must pass the `-iadc` option when creating Csound. This in turn will cause your browser to request access to the microphone. The Csound instrument couldn't be any simpler. It just accesses the live input from channel 1, and sends its rms value to a channel called `"rms"`. The function triggered by `setInterval` queries the rms value every 50 milliseconds. 
+In order to request live input we must pass the `-iadc` option when creating Csound. This in turn will cause your browser to request access to the microphone. The Csound instrument couldn't be any simpler. It just accesses the live input from channel 1, and sends its rms value to a channel called `"rms"`. The function triggered by `setInterval` queries the rms value every 50 milliseconds. The interval function gets cleared once Csound stops performing. 
 
 There is a very rudimentary beat detection function included with this example. The code for it shown below:
 
@@ -128,9 +134,11 @@ async function preload() {
     await csound.start();
 
     //query the amplitude every 50ms..
-    setInterval(async function () {
-        frequency = await csound.getControlChannel("freq");
-    }, 50);
+    let getAmp = setInterval(async () => {
+        amplitude = await csound.getControlChannel("amp");
+    }, 10);
+
+    csound.on("stop", () => clearInterval(getAmp));
 }
 ```
 

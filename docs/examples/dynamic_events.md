@@ -52,4 +52,4 @@ if (this.position.y > height - this.radius) {
     }
 ```
 
-The frequency of the sound each ball makes is determined by it mass. The small the ball, the higher in pitch it will sound when it bounces. The duration of each note will decrease on each bounce thanks to the duration being set as `impuleDur / this.numBounces`. Finally, the `impulse` var is used to determine how much filtering takes place on each bounce. As the ball loses more and more energy, the higher end of the spectrum becomes less and less prominent. 
+The frequency of the sound each ball makes is determined by its mass. The smaller the ball, the higher in pitch it will sound when it bounces. The duration of each note will decrease on each bounce thanks to the duration being set as `impuleDur / this.numBounces`. Finally, the `impulse` var is used to determine how much filtering takes place on each bounce. As the ball loses more and more energy, the higher end of the spectrum becomes less and less prominent. 

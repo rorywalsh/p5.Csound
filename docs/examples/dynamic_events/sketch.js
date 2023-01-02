@@ -83,10 +83,14 @@ async function mousePressed(){
 }
 
 function mouseDragged() {
-  if (dragCount % 5 == 0)
+  if (dragCount % 5 == 0 && dragCount < 100)
     balls.push(new Ball(mouseX, mouseY, random(2, 10)));
 
   dragCount++;
+}
+
+function mouseReleased(){
+  dragCount = 0;
 }
 
 class Ball {
