@@ -47,7 +47,7 @@ async function preload() {
         kIndex init -1
         kBpm = chnget:k("BPM")
         if chnget:k("play") == 1 then      
-            chnset:k(kIndex, "index")
+            chnset(kIndex, "index")
             if metro(kBpm/60) == 1 then
                 triggerIfHitEnabled(kIndex, 8)
                 kIndex = kIndex < 15 ? kIndex+1 : 0
