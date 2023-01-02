@@ -100,7 +100,7 @@ async function preload() {
 }
 ```
 
-The first line of Csound code declares a function table. Its size and GEN routine are not important as we will be overwriting its contents with that of the loaded sound file. The instrument itself, when started will begin outputting samples from the loaded sound file. `setksmps 1` is set to ensure our k-rate variables are updating at audio rate. Therefore `kIndex` is our read pointer (note that the same results could be achieved with a `phasor` opcode). Each time `kIndex` is updated, its value is sent to a channel called `"sampleIndex"`. This channel will be used to position the playback scrubber later in the sketch. 
+The first line of Csound code declares a function table. Its size and GEN routine are not important as we will be overwriting its contents with that of the loaded sound file. The instrument itself, when started, will begin outputting samples from the loaded sound file. `setksmps 1` is set to ensure our k-rate variables are updating at audio rate. Therefore `kIndex` is our read pointer (note that the same results could be achieved with a `phasor` opcode). Each time `kIndex` is updated, its value is sent to a channel called `"sampleIndex"`. This channel will be used to position the playback scrubber later in the sketch. 
 
 The next section of Csound code listens for changes to a channel called `"newIndexUpdate"`. Whenever its value changes, it queries the `"newIndex"` channel, which will contain the current playback position. (More on this below). The final piece of Csound code listens to channel `"stop"`. Whenever it is 1, the instrument will be terminated. 
 
