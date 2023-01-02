@@ -1,5 +1,3 @@
-import { Csound } from "@csound/browser";
-
 let csound = null;
 let enemies = [];
 let isPlaying = false;

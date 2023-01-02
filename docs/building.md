@@ -1,6 +1,6 @@
 ## Building p5.Csound
 
-To build p5.Csound you should fist ensure you have a current version of Node installed, as well as an active internet connection. Simply clone the repo and run the following command from the repo root dir. 
+To build p5.Csound you should fist ensure you have a current version of Node installed, as well as an active internet connection. Simply clone the [repo](https://github.com/rorywalsh/p5.Csound) and run the following command from the repo root dir. 
 
 ```bash
 npm install
