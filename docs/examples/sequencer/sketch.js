@@ -77,7 +77,7 @@ async function preload() {
     endin
   `);
 
-    await csound.start();
+    await Csound.startAudio();
 
     await csound.setControlChannel("BPM", 240);
     await csound.setControlChannel("play", 0);
@@ -164,7 +164,7 @@ async function draw() {
 }
 
 async function mousePressed() {
-    Csound.startAudio();
+    Csound.resumeAudio();
     voices.forEach((v) => v.hitTest(mouseX, mouseY));
     updateCsoundTables();
 

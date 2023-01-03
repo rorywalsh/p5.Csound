@@ -25,7 +25,7 @@ instr 1
 endin
 `);
 
-  await csound.start();
+  await Csound.startAudio();
 
 }
 
@@ -64,7 +64,7 @@ function draw() {
 }
 
 async function mousePressed() {
-  await Csound.startAudio()
+  Csound.resumeAudio();
   console.log(csound);
   if (mouseX > audioImagePos.x && mouseY > audioImagePos.y &&
     mouseX < audioImagePos.x + audioImagePos.w && mouseY < audioImagePos.y + audioImagePos.h) {

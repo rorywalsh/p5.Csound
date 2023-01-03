@@ -24,7 +24,7 @@ async function preload() {
     endin
     `);
 
-    await csound.start();
+    await Csound.startAudio();
 
     //query the amplitude every 50ms..
     let getRMS = setInterval(async function () {
@@ -131,7 +131,7 @@ async function preload() {
     endin
     `);
 
-    await csound.start();
+    await Csound.startAudio();
 
     //query the amplitude every 50ms..
     let getAmp = setInterval(async () => {

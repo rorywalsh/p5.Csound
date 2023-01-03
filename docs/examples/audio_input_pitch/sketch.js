@@ -33,7 +33,7 @@ async function preload() {
     endin
     `);
 
-    await csound.start();
+    await Csound.startAudio();
     await csound.setControlChannel("micThreshold", 0.2);
 
 
@@ -104,7 +104,7 @@ function draw() {
 
 
 async function mousePressed() {
-    Csound.startAudio();
+    Csound.resumeAudio();
     if (!isPlaying) {
         isPlaying = true;
         await csound.evalCode("schedule(1, 0, 9999)");

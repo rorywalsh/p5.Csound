@@ -22,7 +22,7 @@ async function preload() {
     endin
     `);
 
-    await csound.start();
+    await Csound.startAudio();
 
     //query the amplitude every 50ms..
     let getAmp = setInterval(async () => {
@@ -73,7 +73,7 @@ function draw() {
 }
 
 async function mousePressed() {
-    Csound.startAudio()
+    Csound.resumeAudio();
 
     if (!isPlaying)
         await csound.evalCode("schedule(1, 0, 9999)");

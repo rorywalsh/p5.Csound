@@ -33,16 +33,6 @@ export const create = async (args = {}) => {
   return csoundObj;
 };
 
-// first attempt RW
-// export const startAudio = async () => {
-//   let ctx = await csoundObj.getAudioContext();
-//   if(ctx.state === "suspended"){
-//     ctx.resume();
-//     await csoundObj.start();
-//   }
-// }
-
-
 export const startAudio = async () => {
   const startPromise = csoundObj.start();
   csoundObj.once("onAudioNodeCreated", (ctx) => {
@@ -50,6 +40,14 @@ export const startAudio = async () => {
           ctx.resume();
       }});
   await startPromise;
+}
+
+export const resumeAudio = async () => {
+  let ctx = await csoundObj.getAudioContext();
+  if(ctx.state === "suspended"){
+    ctx.resume();
+    await csoundObj.start();
+  }
 }
 
 export const loadAsset = async (fileURL, fileName) => {

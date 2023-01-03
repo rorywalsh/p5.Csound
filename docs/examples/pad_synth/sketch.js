@@ -76,7 +76,8 @@ async function preload() {
     `);
 
     await csound.setControlChannel("tableIndex", 1);
-    await csound.start();
+    
+    await Csound.startAudio();
 
     //set to run 20 times a second. a JS timer is fine here because it's
     //only for display purposes 
@@ -113,7 +114,7 @@ function draw() {
 //first time a user presses the screen we copy the contents of the 100
 //transitional tables, and create new instances of the Table class
 async function mousePressed() {
-    Csound.startAudio()
+    Csound.resumeAudio();
     if (!isPlaying) {
         for (let i = 0; i < numTables; i++) {
             let data = await csound.tableCopyOut(200 + i);

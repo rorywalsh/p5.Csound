@@ -28,7 +28,7 @@ async function preload() {
   endin 
   `);
 
-  await csound.start();
+  await Csound.startAudio();
 
   audioCntx = await csound.getAudioContext();
   fft = audioCntx.createAnalyser();
@@ -72,7 +72,7 @@ function draw() {
 
 
 async function mousePressed() {
-  Csound.startAudio();
+  Csound.resumeAudio();
   if (csound) {
     csound.evalCode(`schedule(1, 0, 10)`);
     isPlaying = true;

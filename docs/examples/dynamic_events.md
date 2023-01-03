@@ -25,7 +25,7 @@ async function preload() {
   endin
   `);
 
-  await csound.start();
+  await Csound.startAudio();
 }
 ```
 

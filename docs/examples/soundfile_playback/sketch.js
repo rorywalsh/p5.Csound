@@ -25,7 +25,7 @@ async function preload() {
   `);
 
 
-  await csound.start();
+  await Csound.startAudio();
 }
 
 
@@ -66,10 +66,10 @@ async function mousePressed() {
     }
   }
   else {
-      Csound.startAudio();
-      if (csound && isPlaying == false) {
-        isPlaying = true;
-        await csound.evalCode(`schedule(1, 0, 10)`); //play sample for 10 seconds
-      }
+    Csound.resumeAudio();
+    if (csound && isPlaying == false) {
+      isPlaying = true;
+      await csound.evalCode(`schedule(1, 0, 10)`); //play sample for 10 seconds
     }
+  }
 }

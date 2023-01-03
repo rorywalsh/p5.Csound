@@ -24,7 +24,7 @@ async function preload() {
   endin
   `);
 
-  await csound.start();
+  await Csound.start();
 
 }
 ```
@@ -39,7 +39,7 @@ Triggering playback of the instrument is trivial, we simply start instrument 1 t
 
 ```js
 async function mousePressed() {  
-  Csound.startAudio();
+  Csound.resumeAudio();
   if (csound) {
     csound.evalCode(`schedule(1, 0, 10)`); //play sample for 10 seconds
   }
@@ -90,7 +90,7 @@ async function preload() {
   endin 
   `);
 
-    await csound.start();
+    await Csound.startAudio();
 
     let getIndex = setInterval(async () => {
         currentSample = await csound.getControlChannel("sampleIndex");

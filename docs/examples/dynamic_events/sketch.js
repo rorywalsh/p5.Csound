@@ -29,7 +29,7 @@ async function preload() {
   endin
   `);
 
-  await csound.start();
+  await Csound.startAudio();
 
 }
 
@@ -67,7 +67,7 @@ function draw() {
 }
 
 async function mousePressed(){
-  Csound.startAudio();
+  Csound.resumeAudio();
   if (mouseX > audioImagePos.x && mouseY > audioImagePos.y &&
     mouseX < audioImagePos.x + audioImagePos.w && mouseY < audioImagePos.y + audioImagePos.h) {
     if (audioState) {

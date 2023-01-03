@@ -41,7 +41,7 @@ Only one Csound object can be created per script. Once you have created the core
     `);
 ```
 
-With some code compiled you can call `csound.start()` to start a Csound performance. A full preload function might look like this.
+With some code compiled you can call `Csound.startAudio()` to start a Csound performance. A full preload function might look like this.
 
 ```js
 async function preload() {
@@ -55,9 +55,13 @@ async function preload() {
     endin
     `);
 
-    await csound.start();
+    await Csound.startAudio();
 }
 ```
+
+<blockquote style="font-size:14px;color:#ddd;background-color:#374752">
+When <code>Csound.startAudio()</code> is called, Csound will create a new audio context. If the browser doesn't detect a user event within a few moment of the context being created, it might suspend the audio context due to strict autoplay policies. If this happens, Csound will either need to be started again. To do this one can call the <code>Csound.resumeAudio()</code> function which checks the context, and if it is suspended will restart Csound.  
+</blockquote>
 
 The `csound.evalCode()` function can also be used to trigger instances of an instrument by calling the `schedule` opcode. For example, we can trigger the above instrument to play from a `mousePressed()` function.
 
@@ -71,5 +75,6 @@ async function mousePressed(){
 ```
 
 Please look through the various examples for further details on running, and controlling Csound instruments from a p5.js sketch.  
+
 
 

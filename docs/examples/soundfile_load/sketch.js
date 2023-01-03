@@ -7,7 +7,7 @@ let previousX = 0;
 let playButton;
 let loadButton;
 let windowSize = 1;
-let audioOn, audioOff, audioState=true;
+let audioOn, audioOff, audioState = true;
 let audioImagePos;
 
 /* This sketch will trigger a sample to play
@@ -49,7 +49,7 @@ async function preload() {
   endin 
   `);
 
-    await csound.start();
+    await Csound.startAudio();
 
     let getIndex = setInterval(async () => {
         currentSample = await csound.getControlChannel("sampleIndex");
@@ -83,16 +83,16 @@ function setup() {
     playButton.size(140, 30);
     playButton.mousePressed(startStopPlayback);
 
-    audioImagePos = {x:width-50, y:height-50, w:32, h:32};
+    audioImagePos = { x: width - 50, y: height - 50, w: 32, h: 32 };
 }
 
 function draw() {
     background("#374752");
     if (csound && sampleData.length > 0) {
         previousY = sampleData[0];
-        
-        for (let i = 0; i < sampleData.length; i+=windowSize) {
-            let x = map(i, 0, sampleData.length-1, 0, width);
+
+        for (let i = 0; i < sampleData.length; i += windowSize) {
+            let x = map(i, 0, sampleData.length - 1, 0, width);
             let y = map(sampleData[i], -1, 1, 0, height);
             stroke("#374752");
             strokeWeight(1);
@@ -108,41 +108,41 @@ function draw() {
         stroke(255);
         line(scrubberX, 0, scrubberX, height);
     }
-    else{
-      fill(255);
-      textAlign(CENTER);
-      text("Wave files only..", width/2, height/2)
+    else {
+        fill(255);
+        textAlign(CENTER);
+        text("Wave files only..", width / 2, height / 2)
     }
 
     image(audioState ? audioOn : audioOff, audioImagePos.x, audioImagePos.y, audioImagePos.w, audioImagePos.h);
 }
 
 async function mousePressed() {
-  //exclude mouse clicks on buttons..
-  if (mouseY < 360 && mouseX > 0 && mouseX < width) {
-      const sampleNum = map(mouseX, 0, width, 0, sampleData.length - 1);
-      //hack to ensure a channel changed message is always sent
-      await csound.setControlChannel("newIndex", sampleNum);
-      await csound.setControlChannel("newIndexUpdate", random(100));
-  }
+    //exclude mouse clicks on buttons..
+    if (mouseY < 360 && mouseX > 0 && mouseX < width) {
+        const sampleNum = map(mouseX, 0, width, 0, sampleData.length - 1);
+        //hack to ensure a channel changed message is always sent
+        await csound.setControlChannel("newIndex", sampleNum);
+        await csound.setControlChannel("newIndexUpdate", random(100));
+    }
 
-  if (mouseX > audioImagePos.x && mouseY > audioImagePos.y &&
-    mouseX < audioImagePos.x + audioImagePos.w && mouseY < audioImagePos.y + audioImagePos.h) {
-    if (audioState) {
-        await csound.pause();
-        audioState = false;
+    if (mouseX > audioImagePos.x && mouseY > audioImagePos.y &&
+        mouseX < audioImagePos.x + audioImagePos.w && mouseY < audioImagePos.y + audioImagePos.h) {
+        if (audioState) {
+            await csound.pause();
+            audioState = false;
+        }
+        else {
+            await csound.resume();
+            print("resuming");
+            audioState = true;
+        }
     }
-    else {
-        await csound.resume();
-        print("resuming");
-        audioState = true;
-    }
-}
 }
 
 async function startStopPlayback() {
     if (csound) {
-        Csound.startAudio()
+        Csound.resumeAudio();
         if (!isPlaying) {
             await csound.setControlChannel("stop", 0);
             csound.evalCode("schedule(1, 0, 999)");
@@ -161,7 +161,7 @@ async function loadSoundfile(obj) {
         const ctx = await csound.getAudioContext();
         const c = await ctx.decodeAudioData(await obj.file.arrayBuffer());
         sampleData = await c.getChannelData(0);
-        windowSize = Math.floor(sampleData.length/44100)*20;
+        windowSize = Math.floor(sampleData.length / 44100) * 20;
 
         await csound.evalCode(
             "giSoundfile ftgen 1, 0, " + sampleData.length + ", -7, 0, 0"

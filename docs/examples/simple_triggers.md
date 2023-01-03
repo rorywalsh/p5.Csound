@@ -24,7 +24,8 @@ instr 1
   outall(aSig)
 endin
     `);
-  await csound.start();
+
+  await Csound.startAudio();
 }
 ```
 
@@ -60,9 +61,9 @@ The `triggerSound()` function just wraps the following code, which sets a random
 The last piece of p5.Csound code in this sketch can be found in the `mouseDragged()` function.
 ```js
 function mouseDragged() {
-  Csound.startAudio();
+  Csound.resumeAudio();
   balls.push(new Ball(mouseX, mouseY));
 }
 ```
 
-When Csound is asked to start, an audio context will be created and told to start running. However, if there are no immediate user interactions with the page for a short time, the browser can mistakenly think that the audioContext was started in error. When this happens it will suspend running of the audio context. `Csound.startAudio()` checks the audioContext, and if it has been suspended asks it to resume. It is not always required, but does provide a simple way of restarting the audio context without having to destroy and recreate your Csound object.
+When Csound is asked to start, an audio context will be created and told to start running. However, if there are no immediate user interactions with the page for a short time, the browser can mistakenly think that the audioContext was started in error. When this happens it will suspend running of the audio context. `Csound.resumeAudio()` checks the audioContext, and if it has been suspended asks it to resume. It is not always required, but does provide a simple way of restarting the audio context without having to destroy and recreate your Csound object. `Csound.resumeAudio()` can be called on each user click. 

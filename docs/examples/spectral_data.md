@@ -25,7 +25,8 @@ async function preload() {
   endin
   `);
 
-  await csound.start();  
+  await Csound.startAudio();
+    
   audioCntx = await csound.getAudioContext();
   fft = audioCntx.createAnalyser();
   audioNode = await csound.getNode();
