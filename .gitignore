@@ -2,3 +2,4 @@ node_modules
 dist
 lib
 docs/examples/p5.csound.js
+.*
