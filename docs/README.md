@@ -1,6 +1,6 @@
 ## p5.Csound
 
-p5.Csound is a lightweight wrapper to the web assembly build of Csound. It provides all the power of Csound inside p5.js sketches. With over a thousand processing opcodes, it is one of the most extensive audio processing libraries available in a browser. This interface provides very little in the way of wrapper functions. In fact, it only provides two; one for creating an instance of Csound, and the other for loading assets. After that, everything is accessible through the core Csound object. 
+p5.Csound is a lightweight wrapper to the web assembly build of Csound. It provides all the power of Csound inside p5.js sketches. With over a thousand processing opcodes, it is one of the most extensive audio processing libraries available in a browser. This simple interface provides just two basic wrapper functions; one for creating an instance of Csound, and the other for loading assets. After that, everything is accessible through the core Csound object. 
 
 Note this project would not be possible without direct contributions of <font color="cornflowerblue">Steven Yi</font>, <font color="cornflowerblue">Hlöðver Sigurðsson</font>, <font color="cornflowerblue">Joachim Heintz</font>. 
 

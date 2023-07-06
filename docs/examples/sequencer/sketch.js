@@ -34,9 +34,8 @@ async function preload() {
         kIndex, iTable xin
         kValue = table:k(kIndex, iTable)
         kDur = chnget:k("duration")
-        kFilterCutoff = chnget:k("filterCutoff")
         if kValue == 1 then
-            schedulek(2, 0, kDur, giNotes[iTable-1], kFilterCutoff)
+            schedulek(2, 0, kDur, giNotes[iTable-1])
         endif
         if iTable > 1 then
 	        triggerIfHitEnabled(kIndex,iTable-1)
@@ -84,7 +83,6 @@ async function preload() {
     await csound.setControlChannel("BPM", 240);
     await csound.setControlChannel("play", 0);
     await csound.setControlChannel("duration", 0.5);
-    await csound.setControlChannel("filterCutoff", 500);
 
     let getIndex = setInterval(async function () {
         currentPos = await csound.getControlChannel("index");

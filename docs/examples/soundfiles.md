@@ -128,7 +128,7 @@ async function loadSoundfile(obj) {
 
 ```
 
-Tje first thing to check is whether or not the user selected a .wav audio file. If so, we access the audioContext Csound is using and use it to decode the `file.arrayBuffer` member of `obj`. `sampleData` is then assigned the samples from channel 0 (note the file player will only output the first channel). After this, we recreate function table 1 (`giSoundfile`), allocating enough samples to hold the contents of channel 1. Once this is done, we can copy the sample data directly to Csound using `csound.tableCopyIn()`. Finally we set the play button to be visible, reset previousX, and set `windowSize` to set the resolution of waveform display. If we try to draw too many points it will slow down our sketch considerably. If we draw too little our waveform will not look good. 
+The first thing to check is whether or not the user selected a .wav audio file. If so, we access the audioContext Csound is using and use it to decode the `file.arrayBuffer` member of `obj`. `sampleData` is then assigned the samples from channel 0 (note the file player will only output the first channel). After this, we recreate function table 1 (`giSoundfile`), allocating enough samples to hold the contents of channel 1. Once this is done, we can copy the sample data directly to Csound using `csound.tableCopyIn()`. Finally we set the play button to be visible, reset previousX, and set `windowSize` to set the resolution of waveform display. If we try to draw too many points it will slow down our sketch considerably. If we draw too little our waveform will not look good. 
 
 
 The play button when pressed will trigger the following function:
