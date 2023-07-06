@@ -38,7 +38,7 @@ async function preload() {
 
     kIncomingIndexUpdate = chnget:k("newIndexUpdate")
     if changed(kIncomingIndexUpdate) == 1 then
-      kIndex = chnget("newIndex")
+      kIndex = chnget:k("newIndex")
     endif
 
     kStop = chnget:k("stop")
@@ -121,6 +121,7 @@ async function mousePressed() {
     //exclude mouse clicks on buttons..
     if (mouseY < 360 && mouseX > 0 && mouseX < width) {
         const sampleNum = map(mouseX, 0, width, 0, sampleData.length - 1);
+        print(sampleNum);
         //hack to ensure a channel changed message is always sent
         await csound.setControlChannel("newIndex", sampleNum);
         await csound.setControlChannel("newIndexUpdate", random(100));

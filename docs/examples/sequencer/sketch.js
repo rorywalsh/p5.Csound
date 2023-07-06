@@ -46,8 +46,10 @@ async function preload() {
     instr 1
         kIndex init -1
         kBpm = chnget:k("BPM")
+
         if chnget:k("play") == 1 then      
-            chnset(kIndex, "index")
+            ;compensate for visual delay..
+            chnset(delayk(kIndex, .1), "index")
             if metro(kBpm/60) == 1 then
                 triggerIfHitEnabled(kIndex, 8)
                 kIndex = kIndex < 15 ? kIndex+1 : 0
